@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+  "bincode",
   #"sdk",
   "sdk/program",
 ]
@@ -61,7 +62,7 @@ static_assertions = "1.1.0"
 wasm-bindgen = { version = "0.2", default-features = false }
 
 # Bumped dependencies to support no_std
-bincode = { version = "2.0.0-rc.3", default-features = false, features = ["alloc", "serde"] }
+bincode = { package = "solana-bincode", path = "bincode", default-features = false }
 bv = { git = "https://github.com/conr2d/bv-rs", branch = "no_std", features = ["serde"] }
 thiserror = { version = "2.0", default-features = false }
 
