@@ -18,9 +18,11 @@ use {
         sysvar::clock::Clock,
         vote::{authorized_voters::AuthorizedVoters, error::VoteError},
     },
+    alloc::{collections::VecDeque, string::String, vec::Vec},
     bincode::{serialize_into, serialized_size, ErrorKind},
+    core::fmt::Debug,
+    core2::io::Cursor,
     serde_derive::{Deserialize, Serialize},
-    std::{collections::VecDeque, fmt::Debug, io::Cursor},
 };
 
 mod vote_state_0_23_5;
@@ -666,7 +668,7 @@ impl VoteState {
 
     // Computes the vote latency for vote on voted_for_slot where the vote itself landed in current_slot
     pub fn compute_vote_latency(voted_for_slot: Slot, current_slot: Slot) -> u8 {
-        std::cmp::min(current_slot.saturating_sub(voted_for_slot), u8::MAX as u64) as u8
+        core::cmp::min(current_slot.saturating_sub(voted_for_slot), u8::MAX as u64) as u8
     }
 
     /// Returns the credits to award for a vote at the given lockout slot index

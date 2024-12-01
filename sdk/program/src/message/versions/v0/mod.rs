@@ -9,7 +9,11 @@
 //! [`v0`]: crate::message::v0
 //! [future message format]: https://docs.solanalabs.com/proposals/versioned-transactions
 
+#[cfg(not(feature = "std"))]
+use hashbrown::HashSet;
 pub use loaded::*;
+#[cfg(feature = "std")]
+use std::collections::HashSet;
 use {
     crate::{
         address_lookup_table::AddressLookupTableAccount,
@@ -24,7 +28,7 @@ use {
         sanitize::SanitizeError,
         short_vec,
     },
-    std::collections::HashSet,
+    alloc::vec::Vec,
 };
 
 mod loaded;

@@ -58,6 +58,11 @@ pub fn get_instance_packed_len<T: BorshSerialize>(instance: &T) -> Result<usize,
 
 macro_rules! impl_get_packed_len_v0 {
     ($borsh:ident $(,#[$meta:meta])?) => {
+        #[cfg(not(feature = "std"))]
+        use hashbrown::HashMap;
+        #[cfg(feature = "std")]
+        use std::collections::HashMap;
+
         /// Get the worst-case packed length for the given BorshSchema
         ///
         /// Note: due to the serializer currently used by Borsh, this function cannot
@@ -72,10 +77,10 @@ macro_rules! impl_get_packed_len_v0 {
         /// Get packed length for the given BorshSchema Declaration
         fn get_declaration_packed_len(
             declaration: &str,
-            definitions: &std::collections::HashMap<$borsh::schema::Declaration, $borsh::schema::Definition>,
+            definitions: &HashMap<$borsh::schema::Declaration, $borsh::schema::Definition>,
         ) -> usize {
             match definitions.get(declaration) {
-                Some($borsh::schema::Definition::Array { length, elements }) => {
+                Some($borsh::schema::Definition::Array { ref length, ref elements }) => {
                     *length as usize * get_declaration_packed_len(elements, definitions)
                 }
                 Some($borsh::schema::Definition::Enum { variants }) => {

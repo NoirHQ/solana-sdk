@@ -15,6 +15,10 @@
 use crate::wasm_bindgen;
 #[allow(deprecated)]
 pub use builtins::{BUILTIN_PROGRAMS_KEYS, MAYBE_BUILTIN_KEY_OR_SYSVAR};
+#[cfg(not(feature = "std"))]
+use hashbrown::HashSet;
+#[cfg(feature = "std")]
+use std::collections::HashSet;
 use {
     crate::{
         bpf_loader, bpf_loader_deprecated, bpf_loader_upgradeable,
@@ -25,7 +29,8 @@ use {
         sanitize::{Sanitize, SanitizeError},
         short_vec, system_instruction, system_program, sysvar,
     },
-    std::{collections::HashSet, convert::TryFrom, str::FromStr},
+    alloc::vec::Vec,
+    core::convert::TryFrom,
 };
 
 #[deprecated(
@@ -38,14 +43,13 @@ mod builtins {
 
     lazy_static! {
         pub static ref BUILTIN_PROGRAMS_KEYS: [Pubkey; 10] = {
-            let parse = |s| Pubkey::from_str(s).unwrap();
             [
-                parse("Config1111111111111111111111111111111111111"),
-                parse("Feature111111111111111111111111111111111111"),
-                parse("NativeLoader1111111111111111111111111111111"),
-                parse("Stake11111111111111111111111111111111111111"),
-                parse("StakeConfig11111111111111111111111111111111"),
-                parse("Vote111111111111111111111111111111111111111"),
+                Pubkey::parse("Config1111111111111111111111111111111111111"),
+                Pubkey::parse("Feature111111111111111111111111111111111111"),
+                Pubkey::parse("NativeLoader1111111111111111111111111111111"),
+                Pubkey::parse("Stake11111111111111111111111111111111111111"),
+                Pubkey::parse("StakeConfig11111111111111111111111111111111"),
+                Pubkey::parse("Vote111111111111111111111111111111111111111"),
                 system_program::id(),
                 bpf_loader::id(),
                 bpf_loader_deprecated::id(),
@@ -174,7 +178,7 @@ pub struct Message {
 }
 
 impl Sanitize for Message {
-    fn sanitize(&self) -> std::result::Result<(), SanitizeError> {
+    fn sanitize(&self) -> core::result::Result<(), SanitizeError> {
         // signing area and read-only non-signing area should not overlap
         if self.header.num_required_signatures as usize
             + self.header.num_readonly_unsigned_accounts as usize
@@ -699,7 +703,7 @@ mod tests {
     use {
         super::*,
         crate::{hash, instruction::AccountMeta, message::MESSAGE_HEADER_LENGTH},
-        std::collections::HashSet,
+        std::{collections::HashSet, str::FromStr},
     };
 
     #[test]

@@ -2,10 +2,13 @@
 //!
 //! [nubpfl]: crate::bpf_loader
 
-use crate::{
-    instruction::{AccountMeta, Instruction},
-    pubkey::Pubkey,
-    sysvar::rent,
+use {
+    crate::{
+        instruction::{AccountMeta, Instruction},
+        pubkey::Pubkey,
+        sysvar::rent,
+    },
+    alloc::{vec, vec::Vec},
 };
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]

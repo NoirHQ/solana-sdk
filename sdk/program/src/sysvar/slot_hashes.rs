@@ -55,6 +55,7 @@ use {
         slot_hashes::MAX_ENTRIES,
         sysvar::{get_sysvar, Sysvar, SysvarId},
     },
+    alloc::{vec, vec::Vec},
     bytemuck_derive::{Pod, Zeroable},
 };
 

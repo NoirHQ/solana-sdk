@@ -2,6 +2,8 @@
 //!
 //! [np]: https://docs.solanalabs.com/runtime/programs#address-lookup-table-program
 
+use alloc::vec::Vec;
+
 pub mod error;
 pub mod instruction;
 pub mod state;

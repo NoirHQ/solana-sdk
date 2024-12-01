@@ -13,6 +13,7 @@ use {
         },
         system_instruction, sysvar,
     },
+    alloc::{string::String, vec, vec::Vec},
     log::*,
     num_derive::{FromPrimitive, ToPrimitive},
     serde_derive::{Deserialize, Serialize},

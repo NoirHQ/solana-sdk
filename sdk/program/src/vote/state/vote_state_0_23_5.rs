@@ -1,5 +1,8 @@
 #![allow(clippy::arithmetic_side_effects)]
-use super::*;
+use {
+    super::*,
+    alloc::{collections::VecDeque, vec::Vec},
+};
 
 const MAX_ITEMS: usize = 32;
 

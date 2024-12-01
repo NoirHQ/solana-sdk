@@ -4,6 +4,7 @@ pub mod prelude {
 }
 
 use {
+    alloc::vec::Vec,
     bytemuck_derive::{Pod, Zeroable},
     consts::*,
     thiserror::Error,

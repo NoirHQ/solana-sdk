@@ -2,11 +2,14 @@
 //!
 //! This is the loader of the program runtime v2.
 
-use crate::{
-    instruction::{AccountMeta, Instruction},
-    loader_v4_instruction::LoaderV4Instruction,
-    pubkey::Pubkey,
-    system_instruction,
+use {
+    crate::{
+        instruction::{AccountMeta, Instruction},
+        loader_v4_instruction::LoaderV4Instruction,
+        pubkey::Pubkey,
+        system_instruction,
+    },
+    alloc::{vec, vec::Vec},
 };
 
 crate::declare_id!("LoaderV411111111111111111111111111111111111");
@@ -44,7 +47,7 @@ pub struct LoaderV4State {
 impl LoaderV4State {
     /// Size of a serialized program account.
     pub const fn program_data_offset() -> usize {
-        std::mem::size_of::<Self>()
+        core::mem::size_of::<Self>()
     }
 }
 

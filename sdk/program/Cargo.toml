@@ -20,6 +20,8 @@ bs58 = { workspace = true }
 bv = { workspace = true, features = ["serde"] }
 bytemuck = { workspace = true }
 bytemuck_derive = { workspace = true }
+core2 = { workspace = true }
+hashbrown = { workspace = true }
 lazy_static = { workspace = true }
 log = { workspace = true }
 memoffset = { workspace = true }
@@ -35,6 +37,7 @@ sha3 = { workspace = true }
 solana-frozen-abi = { workspace = true, optional = true }
 solana-frozen-abi-macro = { workspace = true, optional = true }
 solana-sdk-macro = { workspace = true }
+spin = { workspace = true }
 thiserror = { workspace = true }
 
 # This is currently needed to build on-chain programs reliably.
@@ -70,9 +73,6 @@ getrandom = { workspace = true, features = ["js", "wasm-bindgen"] }
 js-sys = { workspace = true }
 wasm-bindgen = { workspace = true }
 
-[target.'cfg(not(target_pointer_width = "64"))'.dependencies]
-parking_lot = { workspace = true }
-
 [dev-dependencies]
 anyhow = { workspace = true }
 array-bytes = { workspace = true }
@@ -99,6 +99,7 @@ std = [
   "borsh0-10?/std",
   "bs58/std",
   "bv/std",
+  "core2/std",
   "itertools/use_std",
   "log/std",
   "num-traits/std",

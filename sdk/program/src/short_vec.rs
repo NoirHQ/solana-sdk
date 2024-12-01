@@ -2,12 +2,13 @@
 
 #![allow(clippy::arithmetic_side_effects)]
 use {
+    alloc::vec::Vec,
+    core::{convert::TryFrom, fmt, marker::PhantomData},
     serde::{
         de::{self, Deserializer, SeqAccess, Visitor},
         ser::{self, SerializeTuple, Serializer},
         Deserialize, Serialize,
     },
-    std::{convert::TryFrom, fmt, marker::PhantomData},
 };
 
 /// Same as u16, but serialized with 1 to 3 bytes. If the value is above

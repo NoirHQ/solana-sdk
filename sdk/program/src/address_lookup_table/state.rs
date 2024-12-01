@@ -2,6 +2,7 @@
 use solana_frozen_abi_macro::{AbiEnumVisitor, AbiExample};
 use {
     crate::slot_hashes::get_entries,
+    alloc::{borrow::Cow, vec, vec::Vec},
     serde_derive::{Deserialize, Serialize},
     solana_program::{
         address_lookup_table::error::AddressLookupError,
@@ -10,7 +11,6 @@ use {
         pubkey::Pubkey,
         slot_hashes::{SlotHashes, MAX_ENTRIES},
     },
-    std::borrow::Cow,
 };
 
 /// The lookup table may be in a deactivating state until

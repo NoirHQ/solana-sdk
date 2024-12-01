@@ -8,9 +8,12 @@
 //! [`invoke_signed`]: invoke_signed
 //! [cpi]: https://solana.com/docs/core/cpi
 
-use crate::{
-    account_info::AccountInfo, entrypoint::ProgramResult, instruction::Instruction, pubkey::Pubkey,
-    stable_layout::stable_instruction::StableInstruction,
+use {
+    crate::{
+        account_info::AccountInfo, entrypoint::ProgramResult, instruction::Instruction,
+        pubkey::Pubkey, stable_layout::stable_instruction::StableInstruction,
+    },
+    alloc::{vec, vec::Vec},
 };
 
 /// Invoke a cross-program instruction.
@@ -365,7 +368,7 @@ pub fn set_return_data(data: &[u8]) {
 pub fn get_return_data() -> Option<(Pubkey, Vec<u8>)> {
     #[cfg(target_os = "solana")]
     {
-        use std::cmp::min;
+        use core::cmp::min;
 
         let mut buf = [0u8; MAX_RETURN_DATA];
         let mut program_id = Pubkey::default();
@@ -397,13 +400,13 @@ pub fn check_type_assumptions() {
     extern crate memoffset;
     use {
         crate::{clock::Epoch, instruction::AccountMeta},
-        memoffset::offset_of,
-        std::{
+        alloc::rc::Rc,
+        core::{
             cell::RefCell,
             mem::{align_of, size_of},
-            rc::Rc,
             str::FromStr,
         },
+        memoffset::offset_of,
     };
 
     // Code in this file assumes that u64 and usize are the same

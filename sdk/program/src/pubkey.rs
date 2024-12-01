@@ -10,13 +10,14 @@ use arbitrary::Arbitrary;
 use borsh::{BorshDeserialize, BorshSchema, BorshSerialize};
 use {
     crate::{decode_error::DecodeError, hash::hashv},
+    alloc::{string::ToString, vec::Vec},
     bytemuck_derive::{Pod, Zeroable},
-    num_derive::{FromPrimitive, ToPrimitive},
-    std::{
+    core::{
         convert::{Infallible, TryFrom},
         fmt, mem,
         str::FromStr,
     },
+    num_derive::{FromPrimitive, ToPrimitive},
     thiserror::Error,
 };
 
@@ -143,7 +144,7 @@ impl From<[u8; 32]> for Pubkey {
 }
 
 impl TryFrom<&[u8]> for Pubkey {
-    type Error = std::array::TryFromSliceError;
+    type Error = core::array::TryFromSliceError;
 
     #[inline]
     fn try_from(pubkey: &[u8]) -> Result<Self, Self::Error> {
@@ -182,6 +183,11 @@ pub fn bytes_are_curve_point<T: AsRef<[u8]>>(_bytes: T) -> bool {
 impl Pubkey {
     pub const fn new_from_array(pubkey_array: [u8; 32]) -> Self {
         Self(pubkey_array)
+    }
+
+    //WARN: This function doesn't do runtime checks.
+    pub const fn parse(s: &str) -> Self {
+        Self(bs58::decode(s.as_bytes()).into_array_const_unwrap())
     }
 
     /// unique Pubkey for tests and benchmarks.

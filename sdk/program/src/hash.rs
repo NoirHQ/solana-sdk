@@ -5,14 +5,17 @@
 
 #[cfg(target_arch = "wasm32")]
 use crate::wasm_bindgen;
-#[cfg(feature = "borsh")]
-use borsh::{BorshDeserialize, BorshSchema, BorshSerialize};
 use {
     crate::sanitize::Sanitize,
     bytemuck_derive::{Pod, Zeroable},
+    core::{convert::TryFrom, fmt, mem, str::FromStr},
     sha2::{Digest, Sha256},
-    std::{convert::TryFrom, fmt, mem, str::FromStr},
     thiserror::Error,
+};
+#[cfg(feature = "borsh")]
+use {
+    alloc::string::ToString,
+    borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
 };
 
 /// Size of a hash in bytes.

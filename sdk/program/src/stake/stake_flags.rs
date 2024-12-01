@@ -1,5 +1,8 @@
 #[cfg(feature = "borsh")]
-use borsh::{BorshDeserialize, BorshSchema, BorshSerialize};
+use {
+    alloc::string::ToString,
+    borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
+};
 
 /// Additional flags for stake state.
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]

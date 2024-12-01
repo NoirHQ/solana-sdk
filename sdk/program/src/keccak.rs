@@ -2,13 +2,16 @@
 //!
 //! [keccak]: https://keccak.team/keccak.html
 
-#[cfg(feature = "borsh")]
-use borsh::{BorshDeserialize, BorshSchema, BorshSerialize};
 use {
     crate::sanitize::Sanitize,
+    core::{convert::TryFrom, fmt, mem, str::FromStr},
     sha3::{Digest, Keccak256},
-    std::{convert::TryFrom, fmt, mem, str::FromStr},
     thiserror::Error,
+};
+#[cfg(feature = "borsh")]
+use {
+    alloc::string::ToString,
+    borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
 };
 
 pub const HASH_BYTES: usize = 32;

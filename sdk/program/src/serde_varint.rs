@@ -2,12 +2,12 @@
 
 #![allow(clippy::arithmetic_side_effects)]
 use {
+    core::{fmt, marker::PhantomData},
     serde::{
         de::{Error as _, SeqAccess, Visitor},
         ser::SerializeTuple,
         Deserializer, Serializer,
     },
-    std::{fmt, marker::PhantomData},
 };
 
 pub trait VarInt: Sized {
@@ -56,7 +56,7 @@ where
     T: VarInt,
 {
     deserializer.deserialize_tuple(
-        (std::mem::size_of::<T>() * 8 + 6) / 7,
+        (core::mem::size_of::<T>() * 8 + 6) / 7,
         VarIntVisitor {
             phantom: PhantomData,
         },

@@ -15,6 +15,10 @@
 
 pub mod solana_rpc_client {
     pub mod rpc_client {
+        #[cfg(not(feature = "std"))]
+        use hashbrown::HashMap;
+        #[cfg(feature = "std")]
+        use std::collections::HashMap;
         use {
             super::super::{
                 solana_rpc_client_api::client_error::Result as ClientResult,
@@ -23,7 +27,8 @@ pub mod solana_rpc_client {
                     transaction::Transaction,
                 },
             },
-            std::{cell::RefCell, collections::HashMap, rc::Rc},
+            alloc::{rc::Rc, string::String},
+            core::cell::RefCell,
         };
 
         #[derive(Default)]
@@ -81,7 +86,7 @@ pub mod solana_rpc_client_api {
         #[derive(thiserror::Error, Debug)]
         #[error("mock-error")]
         pub struct ClientError;
-        pub type Result<T> = std::result::Result<T, ClientError>;
+        pub type Result<T> = core::result::Result<T, ClientError>;
     }
 }
 
@@ -123,7 +128,10 @@ pub mod solana_sdk {
     };
 
     pub mod account {
-        use crate::{clock::Epoch, pubkey::Pubkey};
+        use {
+            crate::{clock::Epoch, pubkey::Pubkey},
+            alloc::vec::Vec,
+        };
         #[derive(Clone)]
         pub struct Account {
             pub lamports: u64,
@@ -204,6 +212,7 @@ pub mod solana_sdk {
                 message::{Message, VersionedMessage},
                 pubkey::Pubkey,
             },
+            alloc::{vec, vec::Vec},
             serde_derive::Serialize,
         };
 
@@ -216,7 +225,7 @@ pub mod solana_sdk {
             pub fn try_new<T: Signers + ?Sized>(
                 message: VersionedMessage,
                 _keypairs: &T,
-            ) -> std::result::Result<Self, SignerError> {
+            ) -> core::result::Result<Self, SignerError> {
                 Ok(VersionedTransaction {
                     signatures: vec![],
                     message,

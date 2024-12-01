@@ -1,6 +1,6 @@
 use {
     crate::{instruction::InstructionError, pubkey::Pubkey},
-    std::io::{Cursor, Read},
+    core2::io::{Cursor, Read},
 };
 
 pub(crate) fn read_u8<T: AsRef<[u8]>>(cursor: &mut Cursor<T>) -> Result<u8, InstructionError> {

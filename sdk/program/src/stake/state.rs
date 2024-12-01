@@ -3,20 +3,24 @@
 // warnings from uses of deprecated types during trait derivations.
 #![allow(deprecated)]
 
-#[cfg(feature = "borsh")]
-use borsh::{io, BorshDeserialize, BorshSchema, BorshSerialize};
-use {
-    crate::{
-        clock::{Clock, Epoch, UnixTimestamp},
-        instruction::InstructionError,
-        pubkey::Pubkey,
-        stake::{
-            instruction::{LockupArgs, StakeError},
-            stake_flags::StakeFlags,
-        },
-        stake_history::{StakeHistory, StakeHistoryEntry},
+use crate::{
+    clock::{Clock, Epoch, UnixTimestamp},
+    instruction::InstructionError,
+    pubkey::Pubkey,
+    stake::{
+        instruction::{LockupArgs, StakeError},
+        stake_flags::StakeFlags,
     },
-    std::collections::HashSet,
+    stake_history::{StakeHistory, StakeHistoryEntry},
+};
+#[cfg(not(feature = "std"))]
+use hashbrown::HashSet;
+#[cfg(feature = "std")]
+use std::collections::HashSet;
+#[cfg(feature = "borsh")]
+use {
+    alloc::string::ToString,
+    borsh::{io, BorshDeserialize, BorshSchema, BorshSerialize},
 };
 
 pub type StakeActivationStatus = StakeHistoryEntry;

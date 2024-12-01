@@ -25,7 +25,10 @@
 //! [`ecrecover`]: https://docs.soliditylang.org/en/v0.8.14/units-and-global-variables.html?highlight=ecrecover#mathematical-and-cryptographic-functions
 
 #[cfg(feature = "borsh")]
-use borsh::{BorshDeserialize, BorshSchema, BorshSerialize};
+use {
+    alloc::string::ToString,
+    borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
+};
 use {core::convert::TryFrom, thiserror::Error};
 
 #[derive(Debug, Clone, PartialEq, Eq, Error)]

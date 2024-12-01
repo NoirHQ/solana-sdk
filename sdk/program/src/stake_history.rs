@@ -7,7 +7,7 @@
 //! [`sysvar::stake_history`]: crate::sysvar::stake_history
 
 pub use crate::clock::Epoch;
-use std::ops::Deref;
+use {alloc::vec::Vec, core::ops::Deref};
 
 pub const MAX_ENTRIES: usize = 512; // it should never take as many as 512 epochs to warm up or cool down
 
@@ -45,7 +45,7 @@ impl StakeHistoryEntry {
     }
 }
 
-impl std::ops::Add for StakeHistoryEntry {
+impl core::ops::Add for StakeHistoryEntry {
     type Output = StakeHistoryEntry;
     fn add(self, rhs: StakeHistoryEntry) -> Self::Output {
         Self {
@@ -63,13 +63,14 @@ pub struct StakeHistory(Vec<(Epoch, StakeHistoryEntry)>);
 
 impl StakeHistory {
     pub fn get(&self, epoch: Epoch) -> Option<&StakeHistoryEntry> {
-        self.binary_search_by(|probe| epoch.cmp(&probe.0))
+        self.0
+            .binary_search_by(|probe| epoch.cmp(&probe.0))
             .ok()
             .map(|index| &self[index].1)
     }
 
     pub fn add(&mut self, epoch: Epoch, entry: StakeHistoryEntry) {
-        match self.binary_search_by(|probe| epoch.cmp(&probe.0)) {
+        match self.0.binary_search_by(|probe| epoch.cmp(&probe.0)) {
             Ok(index) => (self.0)[index] = (epoch, entry),
             Err(index) => (self.0).insert(index, (epoch, entry)),
         }

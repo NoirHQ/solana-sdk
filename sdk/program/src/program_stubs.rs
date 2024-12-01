@@ -2,14 +2,18 @@
 
 #![cfg(not(target_os = "solana"))]
 
+#[cfg(feature = "std")]
+use std::sync::RwLock;
 use {
     crate::{
         account_info::AccountInfo, entrypoint::ProgramResult, instruction::Instruction,
         program_error::UNSUPPORTED_SYSVAR, pubkey::Pubkey,
     },
+    alloc::{boxed::Box, format, sync::Arc, vec::Vec},
     base64::{prelude::BASE64_STANDARD, Engine},
-    std::sync::{Arc, RwLock},
 };
+#[cfg(not(feature = "std"))]
+use {log::info as println, spin::RwLock};
 
 lazy_static::lazy_static! {
     static ref SYSCALL_STUBS: Arc<RwLock<Box<dyn SyscallStubs>>> = Arc::new(RwLock::new(Box::new(DefaultSyscallStubs {})));
@@ -18,7 +22,7 @@ lazy_static::lazy_static! {
 // The default syscall stubs may not do much, but `set_syscalls()` can be used
 // to swap in alternatives
 pub fn set_syscall_stubs(syscall_stubs: Box<dyn SyscallStubs>) -> Box<dyn SyscallStubs> {
-    std::mem::replace(&mut SYSCALL_STUBS.write().unwrap(), syscall_stubs)
+    core::mem::replace(&mut SYSCALL_STUBS.write().unwrap(), syscall_stubs)
 }
 
 #[allow(clippy::arithmetic_side_effects)]
@@ -79,11 +83,11 @@ pub trait SyscallStubs: Sync + Send {
             is_nonoverlapping(src as usize, n, dst as usize, n),
             "memcpy does not support overlapping regions"
         );
-        std::ptr::copy_nonoverlapping(src, dst, n);
+        core::ptr::copy_nonoverlapping(src, dst, n);
     }
     /// # Safety
     unsafe fn sol_memmove(&self, dst: *mut u8, src: *const u8, n: usize) {
-        std::ptr::copy(src, dst, n);
+        core::ptr::copy(src, dst, n);
     }
     /// # Safety
     unsafe fn sol_memcmp(&self, s1: *const u8, s2: *const u8, n: usize, result: *mut i32) {
@@ -101,7 +105,7 @@ pub trait SyscallStubs: Sync + Send {
     }
     /// # Safety
     unsafe fn sol_memset(&self, s: *mut u8, c: u8, n: usize) {
-        let s = std::slice::from_raw_parts_mut(s, n);
+        let s = core::slice::from_raw_parts_mut(s, n);
         for val in s.iter_mut().take(n) {
             *val = c;
         }
@@ -274,6 +278,26 @@ where
         src.saturating_sub(&dst) >= dst_len
     } else {
         dst.saturating_sub(&src) >= src_len
+    }
+}
+
+// HACK: Handle the interface mismatch between `std::sync::RwLock::read` and `spin::RwLock::read`.
+#[cfg(not(feature = "std"))]
+pub trait LockResult {
+    fn unwrap(self) -> Self;
+}
+
+#[cfg(not(feature = "std"))]
+impl LockResult for spin::RwLockReadGuard<'_, Box<dyn SyscallStubs>> {
+    fn unwrap(self) -> Self {
+        self
+    }
+}
+
+#[cfg(not(feature = "std"))]
+impl LockResult for spin::RwLockWriteGuard<'_, Box<dyn SyscallStubs>> {
+    fn unwrap(self) -> Self {
+        self
     }
 }
 

@@ -29,20 +29,23 @@
 
 #![allow(clippy::arithmetic_side_effects)]
 
-use crate::{
-    account_info::AccountInfo,
-    instruction::{AccountMeta, Instruction},
-    program_error::ProgramError,
-    pubkey::Pubkey,
-    sanitize::SanitizeError,
-    serialize_utils::{read_pubkey, read_slice, read_u16, read_u8},
-};
 #[cfg(feature = "dev-context-only-utils")]
 use qualifier_attr::qualifiers;
 #[cfg(not(target_os = "solana"))]
 use {
     crate::serialize_utils::{append_slice, append_u16, append_u8},
     bitflags::bitflags,
+};
+use {
+    crate::{
+        account_info::AccountInfo,
+        instruction::{AccountMeta, Instruction},
+        program_error::ProgramError,
+        pubkey::Pubkey,
+        sanitize::SanitizeError,
+        serialize_utils::{read_pubkey, read_slice, read_u16, read_u8},
+    },
+    alloc::vec::Vec,
 };
 
 /// Instructions sysvar, dummy type.

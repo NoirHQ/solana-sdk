@@ -19,6 +19,7 @@ use crate::wasm_bindgen;
 use borsh::BorshSerialize;
 use {
     crate::{pubkey::Pubkey, sanitize::Sanitize, short_vec},
+    alloc::{string::String, vec::Vec},
     bincode::serialize,
     serde::Serialize,
     thiserror::Error,

@@ -2,12 +2,15 @@
 //!
 //! [blake3]: https://github.com/BLAKE3-team/BLAKE3
 
-#[cfg(feature = "borsh")]
-use borsh::{BorshDeserialize, BorshSchema, BorshSerialize};
 use {
     crate::sanitize::Sanitize,
-    std::{convert::TryFrom, fmt, mem, str::FromStr},
+    core::{convert::TryFrom, fmt, mem, str::FromStr},
     thiserror::Error,
+};
+#[cfg(feature = "borsh")]
+use {
+    alloc::string::ToString,
+    borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
 };
 
 /// Size of a hash in bytes.

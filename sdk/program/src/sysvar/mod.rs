@@ -81,9 +81,12 @@
 //!
 //! [sysvardoc]: https://docs.solanalabs.com/runtime/sysvars
 
-use crate::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 #[allow(deprecated)]
 pub use sysvar_ids::ALL_IDS;
+use {
+    crate::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey},
+    alloc::vec::Vec,
+};
 
 pub mod clock;
 pub mod epoch_rewards;
@@ -103,7 +106,7 @@ pub mod stake_history;
     note = "please use `solana_sdk::reserved_account_keys::ReservedAccountKeys` instead"
 )]
 mod sysvar_ids {
-    use {super::*, lazy_static::lazy_static};
+    use {super::*, alloc::vec, lazy_static::lazy_static};
     lazy_static! {
         // This will be deprecated and so this list shouldn't be modified
         pub static ref ALL_IDS: Vec<Pubkey> = vec![

@@ -2,8 +2,8 @@
 use arbitrary::Arbitrary;
 use {
     crate::{clock::Epoch, pubkey::Pubkey},
+    alloc::{collections::BTreeMap, vec::Vec},
     serde_derive::{Deserialize, Serialize},
-    std::collections::BTreeMap,
 };
 
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
@@ -81,7 +81,7 @@ impl AuthorizedVoters {
         self.authorized_voters.contains_key(&epoch)
     }
 
-    pub fn iter(&self) -> std::collections::btree_map::Iter<Epoch, Pubkey> {
+    pub fn iter(&self) -> alloc::collections::btree_map::Iter<Epoch, Pubkey> {
         self.authorized_voters.iter()
     }
 

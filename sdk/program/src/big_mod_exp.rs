@@ -1,3 +1,5 @@
+use alloc::{vec, vec::Vec};
+
 #[repr(C)]
 pub struct BigModExpParams {
     pub base: *const u8,

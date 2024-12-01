@@ -1,10 +1,14 @@
+#[cfg(not(feature = "std"))]
+use hashbrown::HashSet;
+#[cfg(feature = "std")]
+use std::collections::HashSet;
 use {
     crate::{
         bpf_loader_upgradeable,
         message::{v0, AccountKeys},
         pubkey::Pubkey,
     },
-    std::{borrow::Cow, collections::HashSet},
+    alloc::{borrow::Cow, vec::Vec},
 };
 
 /// Combination of a version #0 message and its loaded addresses
@@ -90,7 +94,7 @@ impl<'a> LoadedMessage<'a> {
             .enumerate()
             .map(|(i, _key)| self.is_writable_internal(i, reserved_account_keys))
             .collect::<Vec<_>>();
-        let _ = std::mem::replace(
+        let _ = core::mem::replace(
             &mut self.is_writable_account_cache,
             is_writable_account_cache,
         );

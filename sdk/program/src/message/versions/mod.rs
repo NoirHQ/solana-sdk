@@ -1,3 +1,7 @@
+#[cfg(not(feature = "std"))]
+use hashbrown::HashSet;
+#[cfg(feature = "std")]
+use std::collections::HashSet;
 use {
     crate::{
         hash::Hash,
@@ -7,12 +11,13 @@ use {
         sanitize::{Sanitize, SanitizeError},
         short_vec,
     },
+    alloc::vec::Vec,
+    core::fmt,
     serde::{
         de::{self, Deserializer, SeqAccess, Unexpected, Visitor},
         ser::{SerializeTuple, Serializer},
     },
     serde_derive::{Deserialize, Serialize},
-    std::{collections::HashSet, fmt},
 };
 
 mod sanitized;
