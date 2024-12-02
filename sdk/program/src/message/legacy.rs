@@ -32,6 +32,11 @@ use {
     alloc::vec::Vec,
     core::convert::TryFrom,
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode},
+    scale_info::TypeInfo,
+};
 
 #[deprecated(
     since = "2.0.0",
@@ -129,6 +134,7 @@ fn compile_instructions(ixs: &[Instruction], keys: &[Pubkey]) -> Vec<CompiledIns
     frozen_abi(digest = "2KnLEqfLcTBQqitE22Pp8JYkaqVVbAkGbCfdeHoyxcAU"),
     derive(AbiExample)
 )]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Serialize, Deserialize, Default, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Message {

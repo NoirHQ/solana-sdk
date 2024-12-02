@@ -24,6 +24,11 @@ use {
     serde::Serialize,
     thiserror::Error,
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode},
+    scale_info::TypeInfo,
+};
 
 /// Reasons the runtime might have rejected an instruction.
 ///
@@ -637,6 +642,7 @@ impl AccountMeta {
 ///
 /// [`Message`]: crate::message::Message
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CompiledInstruction {

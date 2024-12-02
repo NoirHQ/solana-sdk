@@ -30,12 +30,18 @@ use {
     },
     alloc::vec::Vec,
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode},
+    scale_info::TypeInfo,
+};
 
 mod loaded;
 
 /// Address table lookups describe an on-chain address lookup table to use
 /// for loading more readonly and writable accounts in a single tx.
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Serialize, Deserialize, Default, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct MessageAddressTableLookup {
@@ -58,6 +64,7 @@ pub struct MessageAddressTableLookup {
 ///
 /// [`message`]: crate::message
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Serialize, Deserialize, Default, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Message {

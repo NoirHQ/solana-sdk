@@ -19,6 +19,11 @@ use {
     },
     serde_derive::{Deserialize, Serialize},
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode},
+    scale_info::TypeInfo,
+};
 
 mod sanitized;
 pub mod v0;
@@ -41,6 +46,7 @@ pub const MESSAGE_VERSION_PREFIX: u8 = 0x80;
     frozen_abi(digest = "G4EAiqmGgBprgf5ePYemLJcoFfx4R7rhC1Weo2FVJ7fn"),
     derive(AbiEnumVisitor, AbiExample)
 )]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum VersionedMessage {
     Legacy(LegacyMessage),

@@ -17,6 +17,11 @@ use {
     alloc::string::ToString,
     borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode, MaxEncodedLen},
+    scale_info::TypeInfo,
+};
 
 /// Size of a hash in bytes.
 pub const HASH_BYTES: usize = 32;
@@ -40,6 +45,7 @@ const MAX_BASE58_LEN: usize = 44;
     derive(BorshSerialize, BorshDeserialize, BorshSchema),
     borsh(crate = "borsh")
 )]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, MaxEncodedLen, TypeInfo))]
 #[derive(
     Serialize,
     Deserialize,

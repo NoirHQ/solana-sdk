@@ -20,6 +20,11 @@ use {
     num_derive::{FromPrimitive, ToPrimitive},
     thiserror::Error,
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode, MaxEncodedLen},
+    scale_info::TypeInfo,
+};
 
 /// Number of bytes in a pubkey
 pub const PUBKEY_BYTES: usize = 32;
@@ -79,6 +84,7 @@ impl From<u64> for PubkeyError {
     derive(BorshSerialize, BorshDeserialize, BorshSchema),
     borsh(crate = "borsh")
 )]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, MaxEncodedLen, TypeInfo))]
 #[derive(
     Clone,
     Copy,

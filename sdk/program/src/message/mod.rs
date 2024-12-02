@@ -55,6 +55,12 @@ mod non_bpf_modules {
 pub use non_bpf_modules::*;
 pub use {compiled_keys::CompileError, legacy::Message};
 
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode, MaxEncodedLen},
+    scale_info::TypeInfo,
+};
+
 /// The length of a message header in bytes.
 pub const MESSAGE_HEADER_LENGTH: usize = 3;
 
@@ -92,6 +98,7 @@ pub const MESSAGE_HEADER_LENGTH: usize = 3;
 ///
 /// [PoH]: https://docs.solanalabs.com/consensus/synchronization
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, MaxEncodedLen, TypeInfo))]
 #[derive(Serialize, Deserialize, Default, Debug, PartialEq, Eq, Clone, Copy)]
 #[serde(rename_all = "camelCase")]
 pub struct MessageHeader {
