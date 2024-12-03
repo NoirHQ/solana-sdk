@@ -17,12 +17,15 @@
 
 extern crate alloc;
 
-use alloc::{boxed::Box, vec::Vec};
-use bincode::config;
-use serde::Serialize;
-
-pub use bincode as v2;
-pub use bincode::error::{DecodeError, EncodeError};
+pub use bincode::{
+    self as v2,
+    error::{DecodeError, EncodeError},
+};
+use {
+    alloc::{boxed::Box, vec::Vec},
+    bincode::config,
+    serde::Serialize,
+};
 
 /// Serializes an object directly into a `Writer` using the default configuration.
 ///
