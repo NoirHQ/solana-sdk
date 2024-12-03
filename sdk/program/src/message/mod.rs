@@ -54,7 +54,6 @@ mod non_bpf_modules {
 #[cfg(not(target_os = "solana"))]
 pub use non_bpf_modules::*;
 pub use {compiled_keys::CompileError, legacy::Message};
-
 #[cfg(feature = "scale")]
 use {
     parity_scale_codec::{Decode, Encode, MaxEncodedLen},

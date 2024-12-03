@@ -550,7 +550,7 @@ impl<'a> Elf64<'a> {
     }
 }
 
-impl<'a> fmt::Debug for Elf64<'a> {
+impl fmt::Debug for Elf64<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "{:#X?}", self.file_header)?;
         for program_header in self.program_header_table.iter() {
@@ -564,7 +564,7 @@ impl<'a> fmt::Debug for Elf64<'a> {
                     SECTION_NAME_LENGTH_MAXIMUM,
                 )
                 .and_then(|name| {
-                    std::str::from_utf8(name).map_err(|_| ElfParserError::InvalidString)
+                    str::from_utf8(name).map_err(|_| ElfParserError::InvalidString)
                 })
                 .unwrap();
             writeln!(f, "{section_name}")?;
@@ -582,7 +582,7 @@ impl<'a> fmt::Debug for Elf64<'a> {
                             SYMBOL_NAME_LENGTH_MAXIMUM,
                         )
                         .and_then(|name| {
-                            std::str::from_utf8(name).map_err(|_| ElfParserError::InvalidString)
+                            str::from_utf8(name).map_err(|_| ElfParserError::InvalidString)
                         })
                         .unwrap();
                     writeln!(f, "{symbol_name}")?;
