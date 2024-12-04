@@ -88,7 +88,8 @@ impl FeeRateGovernor {
         if me.target_signatures_per_slot > 0 {
             // lamports_per_signature can range from 50% to 1000% of
             // target_lamports_per_signature
-            me.min_lamports_per_signature = core::cmp::max(1, me.target_lamports_per_signature / 2);
+            me.min_lamports_per_signature =
+                core::cmp::max(1, me.target_lamports_per_signature / 2);
             me.max_lamports_per_signature = me.target_lamports_per_signature * 10;
 
             // What the cluster should charge at `latest_signatures_per_slot`

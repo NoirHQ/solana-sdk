@@ -15,10 +15,6 @@
 use crate::wasm_bindgen;
 #[allow(deprecated)]
 pub use builtins::{BUILTIN_PROGRAMS_KEYS, MAYBE_BUILTIN_KEY_OR_SYSVAR};
-#[cfg(not(feature = "std"))]
-use hashbrown::HashSet;
-#[cfg(feature = "std")]
-use std::collections::HashSet;
 use {
     crate::{
         bpf_loader, bpf_loader_deprecated, bpf_loader_upgradeable,
@@ -29,8 +25,7 @@ use {
         sanitize::{Sanitize, SanitizeError},
         short_vec, system_instruction, system_program, sysvar,
     },
-    alloc::vec::Vec,
-    core::convert::TryFrom,
+    nostd::{collections::HashSet, prelude::*},
 };
 #[cfg(feature = "scale")]
 use {

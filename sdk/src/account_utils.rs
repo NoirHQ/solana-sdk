@@ -6,7 +6,7 @@ use {
         instruction::InstructionError,
     },
     bincode::ErrorKind,
-    std::cell::Ref,
+    nostd::cell::Ref,
 };
 
 /// Convenience trait to covert bincode errors to instruction errors.

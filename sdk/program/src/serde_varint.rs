@@ -2,7 +2,7 @@
 
 #![allow(clippy::arithmetic_side_effects)]
 use {
-    core::{fmt, marker::PhantomData},
+    nostd::{fmt, marker::PhantomData},
     serde::{
         de::{Error as _, SeqAccess, Visitor},
         ser::SerializeTuple,

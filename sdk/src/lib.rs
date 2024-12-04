@@ -29,8 +29,11 @@
 //! [json]: https://solana.com/docs/rpc
 //! [`clap`]: https://docs.rs/clap
 
-#![allow(incomplete_features)]
+#![allow(incomplete_features, unexpected_cfgs)]
 #![cfg_attr(RUSTC_WITH_SPECIALIZATION, feature(specialization))]
+#![cfg_attr(not(feature = "std"), no_std)]
+
+extern crate alloc;
 
 // Allows macro expansion of `use ::solana_sdk::*` to work within this crate
 extern crate self as solana_sdk;

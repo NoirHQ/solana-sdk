@@ -17,7 +17,7 @@ use {
             },
         },
     },
-    alloc::{string::ToString, vec::Vec},
+    nostd::prelude::*,
     serde_derive::{Deserialize, Serialize},
 };
 

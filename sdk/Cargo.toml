@@ -17,22 +17,51 @@ edition = { workspace = true }
 program = []
 
 default = [
+  "std",
   "borsh",
   "full" # functionality that is not compatible or needed for on-chain programs
 ]
+std = [
+  "bincode/std",
+  "bitflags/std",
+  "borsh/std",
+  "bs58/std",
+  "byteorder?/std",
+  "chrono?/std",
+  "nostd/std",
+  "derivation-path/std",
+  "digest?/std",
+  "ed25519-dalek?/std",
+  "ed25519-dalek-bip32?/std",
+  "hmac/std",
+  "itertools/use_std",
+  "libsecp256k1?/std",
+  "log/std",
+  "num_enum/std",
+  "pbkdf2/std",
+  "rand?/std",
+  "rand0-7?/std",
+  "serde/std",
+  "serde_json?/std",
+  "serde_with/std",
+  "sha2/std",
+  "sha3?/std",
+  "siphasher/std",
+  "solana-program/std",
+  "thiserror/std",
+]
 full = [
-    "byteorder",
-    "chrono",
-    "generic-array",
-    "memmap2",
-    "rand",
-    "rand0-7",
-    "serde_json",
-    "ed25519-dalek",
-    "ed25519-dalek-bip32",
-    "libsecp256k1",
-    "sha3",
-    "digest",
+  "byteorder",
+  "chrono",
+  "memmap2",
+  "rand",
+  "rand0-7",
+  "serde_json",
+  "ed25519-dalek",
+  "ed25519-dalek-bip32",
+  "libsecp256k1",
+  "sha3",
+  "digest",
 ]
 borsh = ["dep:borsh", "solana-program/borsh"]
 dev-context-only-utils = [
@@ -58,25 +87,25 @@ derivation-path = { workspace = true }
 digest = { workspace = true, optional = true }
 ed25519-dalek = { workspace = true, optional = true }
 ed25519-dalek-bip32 = { workspace = true, optional = true }
-generic-array = { workspace = true, features = ["serde", "more_lengths"], optional = true }
 hmac = { workspace = true }
 itertools =  { workspace = true }
 lazy_static = { workspace = true }
 libsecp256k1 = { workspace = true, optional = true, features = ["hmac"] }
 log = { workspace = true }
 memmap2 = { workspace = true, optional = true }
+nostd = { workspace = true }
 num_enum = { workspace = true }
 pbkdf2 = { workspace = true }
 qstring = { workspace = true }
 qualifier_attr = { workspace = true, optional = true }
 rand = { workspace = true, optional = true }
-rand0-7 = { package = "rand", version = "0.7", optional = true }
+rand0-7 = { package = "rand", version = "0.7", default-features = false, features = ["alloc"], optional = true }
 rustversion = { workspace = true }
 serde = { workspace = true }
 serde_bytes = { workspace = true }
 serde_derive = { workspace = true }
 serde_json = { workspace = true, optional = true }
-serde_with = { workspace = true, features = ["macros"] }
+serde_with = { workspace = true, features = ["alloc", "macros"] }
 sha2 = { workspace = true }
 sha3 = { workspace = true, optional = true }
 siphasher = { workspace = true }

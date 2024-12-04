@@ -1,7 +1,3 @@
-#[cfg(not(feature = "std"))]
-use hashbrown::HashSet;
-#[cfg(feature = "std")]
-use std::collections::HashSet;
 use {
     crate::{
         ed25519_program,
@@ -21,8 +17,7 @@ use {
         solana_program::{system_instruction::SystemInstruction, system_program},
         sysvar::instructions::{BorrowedAccountMeta, BorrowedInstruction},
     },
-    alloc::{borrow::Cow, vec::Vec},
-    core::convert::TryFrom,
+    nostd::{borrow::Cow, collections::HashSet, prelude::*},
     thiserror::Error,
 };
 

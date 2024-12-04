@@ -3,7 +3,7 @@
 #![allow(clippy::arithmetic_side_effects)]
 use {
     crate::{pubkey::Pubkey, sanitize::SanitizeError},
-    alloc::vec::Vec,
+    nostd::prelude::*,
 };
 
 pub mod cursor;

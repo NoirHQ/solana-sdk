@@ -2,12 +2,12 @@
 
 #![cfg(feature = "full")]
 
-use {crate::transaction::TransactionError, std::io, thiserror::Error};
+use {crate::transaction::TransactionError, nostd::prelude::*, thiserror::Error};
 
 #[derive(Debug, Error)]
 pub enum TransportError {
     #[error("transport io error: {0}")]
-    IoError(#[from] io::Error),
+    IoError(#[from] nostd::io::Error),
     #[error("transport transaction error: {0}")]
     TransactionError(#[from] TransactionError),
     #[error("transport custom error: {0}")]
@@ -24,4 +24,4 @@ impl TransportError {
     }
 }
 
-pub type Result<T> = std::result::Result<T, TransportError>;
+pub type Result<T> = core::result::Result<T, TransportError>;

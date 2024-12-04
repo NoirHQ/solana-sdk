@@ -16,7 +16,7 @@ use {
         account_info::AccountInfo, clock::Slot, instruction::Instruction,
         program_error::ProgramError, pubkey::Pubkey, rent::Rent, system_instruction,
     },
-    alloc::{vec, vec::Vec},
+    nostd::prelude::*,
 };
 
 crate::declare_id!("Feature111111111111111111111111111111111111");

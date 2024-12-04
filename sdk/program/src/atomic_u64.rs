@@ -1,7 +1,7 @@
 pub(crate) use implementation::AtomicU64;
 
 mod implementation {
-    use core::sync::atomic;
+    use nostd::sync::atomic;
 
     pub(crate) struct AtomicU64(atomic::AtomicU64);
 

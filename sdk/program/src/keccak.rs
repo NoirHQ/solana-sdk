@@ -4,14 +4,14 @@
 
 use {
     crate::sanitize::Sanitize,
-    core::{convert::TryFrom, fmt, mem, str::FromStr},
+    nostd::{fmt, mem, str::FromStr},
     sha3::{Digest, Keccak256},
     thiserror::Error,
 };
 #[cfg(feature = "borsh")]
 use {
-    alloc::string::ToString,
     borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
+    nostd::prelude::*,
 };
 
 pub const HASH_BYTES: usize = 32;

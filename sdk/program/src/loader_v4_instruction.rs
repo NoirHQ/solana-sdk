@@ -1,6 +1,6 @@
 //! Instructions for the v4 built-in loader program.
 
-use alloc::vec::Vec;
+use nostd::prelude::*;
 
 #[repr(u8)]
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]

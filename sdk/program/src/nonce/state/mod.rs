@@ -2,13 +2,9 @@
 
 mod current;
 pub use current::{Data, DurableNonce, State};
-#[cfg(not(feature = "std"))]
-use hashbrown::HashSet;
-#[cfg(feature = "std")]
-use std::collections::HashSet;
 use {
     crate::{hash::Hash, pubkey::Pubkey},
-    alloc::boxed::Box,
+    nostd::{collections::HashSet, prelude::*},
     serde_derive::{Deserialize, Serialize},
 };
 

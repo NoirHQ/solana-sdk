@@ -1,6 +1,6 @@
 //! Used by validators to run events on exit.
 
-use std::fmt;
+use nostd::{fmt, prelude::*};
 
 #[derive(Default)]
 pub struct Exit {

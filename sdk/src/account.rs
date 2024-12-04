@@ -10,19 +10,20 @@ use {
         loader_v4,
         pubkey::Pubkey,
     },
+    nostd::{
+        cell::{Ref, RefCell},
+        fmt,
+        mem::MaybeUninit,
+        prelude::*,
+        ptr,
+        rc::Rc,
+        sync::Arc,
+    },
     serde::{
         ser::{Serialize, Serializer},
         Deserialize,
     },
     solana_program::{account_info::AccountInfo, debug_account_data::*, sysvar::Sysvar},
-    std::{
-        cell::{Ref, RefCell},
-        fmt,
-        mem::MaybeUninit,
-        ptr,
-        rc::Rc,
-        sync::Arc,
-    },
 };
 
 /// An Account with data that is stored on chain
@@ -144,7 +145,7 @@ impl From<AccountSharedData> for Account {
         let account_data = Arc::make_mut(&mut other.data);
         Self {
             lamports: other.lamports,
-            data: std::mem::take(account_data),
+            data: core::mem::take(account_data),
             owner: other.owner,
             executable: other.executable,
             rent_epoch: other.rent_epoch,

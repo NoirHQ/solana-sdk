@@ -1,6 +1,7 @@
 use {
     super::VersionedTransaction,
     crate::{sanitize::SanitizeError, signature::Signature},
+    nostd::prelude::*,
     solana_program::message::SanitizedVersionedMessage,
 };
 

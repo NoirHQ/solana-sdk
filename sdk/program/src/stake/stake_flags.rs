@@ -1,7 +1,7 @@
 #[cfg(feature = "borsh")]
 use {
-    alloc::string::ToString,
     borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
+    nostd::prelude::*,
 };
 
 /// Additional flags for stake state.

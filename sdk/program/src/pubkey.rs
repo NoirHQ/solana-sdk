@@ -10,13 +10,8 @@ use arbitrary::Arbitrary;
 use borsh::{BorshDeserialize, BorshSchema, BorshSerialize};
 use {
     crate::{decode_error::DecodeError, hash::hashv},
-    alloc::{string::ToString, vec::Vec},
     bytemuck_derive::{Pod, Zeroable},
-    core::{
-        convert::{Infallible, TryFrom},
-        fmt, mem,
-        str::FromStr,
-    },
+    nostd::{convert::Infallible, fmt, mem, prelude::*, str::FromStr},
     num_derive::{FromPrimitive, ToPrimitive},
     thiserror::Error,
 };

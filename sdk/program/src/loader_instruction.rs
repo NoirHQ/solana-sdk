@@ -8,7 +8,7 @@ use {
         pubkey::Pubkey,
         sysvar::rent,
     },
-    alloc::{vec, vec::Vec},
+    nostd::prelude::*,
 };
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]

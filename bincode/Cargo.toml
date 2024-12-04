@@ -8,6 +8,7 @@ edition = "2021"
 
 [dependencies]
 bincode = { version = "2.0.0-rc.3", default-features = false, features = ["alloc", "serde"] }
+nostd = { workspace = true }
 serde = { workspace = true }
 thiserror = { workspace = true }
 
@@ -15,6 +16,7 @@ thiserror = { workspace = true }
 default = ["std"]
 std = [
   "bincode/std",
+  "nostd/std",
   "serde/std",
   "thiserror/std",
 ]

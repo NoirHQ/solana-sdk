@@ -5,6 +5,7 @@
 
 use {
     byteorder::{ByteOrder, LittleEndian},
+    nostd::prelude::*,
     solana_sdk::clock::Slot,
 };
 
@@ -30,7 +31,7 @@ impl HardForks {
     }
 
     // Returns a sorted-by-slot iterator over the registered hark forks
-    pub fn iter(&self) -> std::slice::Iter<(Slot, usize)> {
+    pub fn iter(&self) -> core::slice::Iter<(Slot, usize)> {
         self.hard_forks.iter()
     }
 

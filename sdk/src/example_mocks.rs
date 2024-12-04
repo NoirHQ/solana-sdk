@@ -18,6 +18,7 @@ pub mod solana_rpc_client {
         use {
             super::super::solana_rpc_client_api::client_error::Result as ClientResult,
             crate::{hash::Hash, signature::Signature, transaction::Transaction},
+            nostd::prelude::*,
         };
 
         pub struct RpcClient;
@@ -46,6 +47,6 @@ pub mod solana_rpc_client_api {
         #[derive(Error, Debug)]
         #[error("mock-error")]
         pub struct ClientError;
-        pub type Result<T> = std::result::Result<T, ClientError>;
+        pub type Result<T> = core::result::Result<T, ClientError>;
     }
 }

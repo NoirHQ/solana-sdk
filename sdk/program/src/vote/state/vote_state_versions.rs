@@ -1,9 +1,6 @@
+use super::{vote_state_0_23_5::VoteState0_23_5, vote_state_1_14_11::VoteState1_14_11, *};
 #[cfg(test)]
 use arbitrary::{Arbitrary, Unstructured};
-use {
-    super::{vote_state_0_23_5::VoteState0_23_5, vote_state_1_14_11::VoteState1_14_11, *},
-    alloc::boxed::Box,
-};
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
 pub enum VoteStateVersions {

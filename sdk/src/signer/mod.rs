@@ -2,6 +2,11 @@
 
 #![cfg(feature = "full")]
 
+#[cfg(feature = "std")]
+use std::{
+    fs::{self, File, OpenOptions},
+    path::Path,
+};
 use {
     crate::{
         derivation_path::DerivationPath,
@@ -10,12 +15,11 @@ use {
         transaction::TransactionError,
     },
     itertools::Itertools,
-    std::{
+    nostd::{
         error,
-        fs::{self, File, OpenOptions},
         io::{Read, Write},
         ops::Deref,
-        path::Path,
+        prelude::*,
     },
     thiserror::Error,
 };
@@ -117,8 +121,8 @@ impl PartialEq for dyn Signer {
 
 impl Eq for dyn Signer {}
 
-impl std::fmt::Debug for dyn Signer {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Debug for dyn Signer {
+    fn fmt(&self, fmt: &mut core::fmt::Formatter) -> core::fmt::Result {
         write!(fmt, "Signer: {:?}", self.pubkey())
     }
 }
@@ -132,11 +136,13 @@ pub fn unique_signers(signers: Vec<&dyn Signer>) -> Vec<&dyn Signer> {
 /// written, and derived from sources.
 pub trait EncodableKey: Sized {
     fn read<R: Read>(reader: &mut R) -> Result<Self, Box<dyn error::Error>>;
+    #[cfg(feature = "std")]
     fn read_from_file<F: AsRef<Path>>(path: F) -> Result<Self, Box<dyn error::Error>> {
         let mut file = File::open(path.as_ref())?;
         Self::read(&mut file)
     }
     fn write<W: Write>(&self, writer: &mut W) -> Result<String, Box<dyn error::Error>>;
+    #[cfg(feature = "std")]
     fn write_to_file<F: AsRef<Path>>(&self, outfile: F) -> Result<String, Box<dyn error::Error>> {
         let outfile = outfile.as_ref();
 

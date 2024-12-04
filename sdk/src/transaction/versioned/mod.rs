@@ -13,8 +13,8 @@ use {
         signers::Signers,
         transaction::{Result, Transaction, TransactionError},
     },
+    nostd::{cmp::Ordering, prelude::*},
     serde::Serialize,
-    std::cmp::Ordering,
 };
 
 mod sanitized;
@@ -72,7 +72,7 @@ impl VersionedTransaction {
     pub fn try_new<T: Signers + ?Sized>(
         message: VersionedMessage,
         keypairs: &T,
-    ) -> std::result::Result<Self, SignerError> {
+    ) -> core::result::Result<Self, SignerError> {
         let static_account_keys = message.static_account_keys();
         if static_account_keys.len() < message.header().num_required_signatures as usize {
             return Err(SignerError::InvalidInput("invalid message".to_string()));
@@ -97,7 +97,7 @@ impl VersionedTransaction {
                     .position(|key| key == signer_key)
                     .ok_or(SignerError::KeypairPubkeyMismatch)
             })
-            .collect::<std::result::Result<_, SignerError>>()?;
+            .collect::<core::result::Result<_, SignerError>>()?;
 
         let unordered_signatures = keypairs.try_sign_message(&message_data)?;
         let signatures: Vec<Signature> = signature_indexes
@@ -108,7 +108,7 @@ impl VersionedTransaction {
                     .copied()
                     .ok_or_else(|| SignerError::InvalidInput("invalid keypairs".to_string()))
             })
-            .collect::<std::result::Result<_, SignerError>>()?;
+            .collect::<core::result::Result<_, SignerError>>()?;
 
         Ok(Self {
             signatures,
@@ -116,13 +116,13 @@ impl VersionedTransaction {
         })
     }
 
-    pub fn sanitize(&self) -> std::result::Result<(), SanitizeError> {
+    pub fn sanitize(&self) -> core::result::Result<(), SanitizeError> {
         self.message.sanitize()?;
         self.sanitize_signatures()?;
         Ok(())
     }
 
-    pub(crate) fn sanitize_signatures(&self) -> std::result::Result<(), SanitizeError> {
+    pub(crate) fn sanitize_signatures(&self) -> core::result::Result<(), SanitizeError> {
         let num_required_signatures = usize::from(self.message.header().num_required_signatures);
         match num_required_signatures.cmp(&self.signatures.len()) {
             Ordering::Greater => Err(SanitizeError::IndexOutOfBounds),

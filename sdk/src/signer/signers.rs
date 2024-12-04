@@ -1,8 +1,11 @@
 #![cfg(feature = "full")]
 
-use crate::{
-    pubkey::Pubkey,
-    signature::{Signature, Signer, SignerError},
+use {
+    crate::{
+        pubkey::Pubkey,
+        signature::{Signature, Signer, SignerError},
+    },
+    nostd::prelude::*,
 };
 
 /// Convenience trait for working with mixed collections of `Signer`s

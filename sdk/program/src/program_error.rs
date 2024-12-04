@@ -5,8 +5,7 @@
 use borsh::io::Error as BorshIoError;
 use {
     crate::{decode_error::DecodeError, instruction::InstructionError, msg, pubkey::PubkeyError},
-    alloc::string::{String, ToString},
-    core::convert::TryFrom,
+    nostd::prelude::*,
     num_traits::{FromPrimitive, ToPrimitive},
     thiserror::Error,
 };
@@ -348,6 +347,6 @@ impl From<PubkeyError> for ProgramError {
 #[cfg(feature = "borsh")]
 impl From<BorshIoError> for ProgramError {
     fn from(error: BorshIoError) -> Self {
-        Self::BorshIoError(alloc::format!("{error}"))
+        Self::BorshIoError(format!("{error}"))
     }
 }

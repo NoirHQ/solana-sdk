@@ -130,7 +130,7 @@ impl RentCollector {
                 rent_due,
             } => match account.lamports().checked_sub(rent_due) {
                 None | Some(0) => {
-                    let account = std::mem::take(account);
+                    let account = core::mem::take(account);
                     CollectedInfo {
                         rent_amount: account.lamports(),
                         account_data_len_reclaimed: account.data().len() as u64,
@@ -192,7 +192,7 @@ pub struct CollectedInfo {
     pub account_data_len_reclaimed: u64,
 }
 
-impl std::ops::Add for CollectedInfo {
+impl core::ops::Add for CollectedInfo {
     type Output = Self;
     fn add(self, other: Self) -> Self {
         Self {
@@ -204,7 +204,7 @@ impl std::ops::Add for CollectedInfo {
     }
 }
 
-impl std::ops::AddAssign for CollectedInfo {
+impl core::ops::AddAssign for CollectedInfo {
     #![allow(clippy::arithmetic_side_effects)]
     fn add_assign(&mut self, other: Self) {
         *self = *self + other;

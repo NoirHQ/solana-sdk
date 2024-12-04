@@ -9,8 +9,8 @@ use {
         account_info::AccountInfo, entrypoint::ProgramResult, instruction::Instruction,
         program_error::UNSUPPORTED_SYSVAR, pubkey::Pubkey,
     },
-    alloc::{boxed::Box, format, sync::Arc, vec::Vec},
     base64::{prelude::BASE64_STANDARD, Engine},
+    nostd::{prelude::*, sync::Arc},
 };
 #[cfg(not(feature = "std"))]
 use {log::info as println, spin::RwLock};

@@ -5,10 +5,11 @@ use {
         clock::Epoch, debug_account_data::*, entrypoint::MAX_PERMITTED_DATA_INCREASE,
         program_error::ProgramError, program_memory::sol_memset, pubkey::Pubkey,
     },
-    alloc::{boxed::Box, rc::Rc},
-    core::{
+    nostd::{
         cell::{Ref, RefCell, RefMut},
         fmt,
+        prelude::*,
+        rc::Rc,
         slice::from_raw_parts_mut,
     },
 };

@@ -14,7 +14,10 @@ use {
         secp256k1_program, stake, system_program, sysvar, vote,
     },
     lazy_static::lazy_static,
-    std::collections::{HashMap, HashSet},
+    nostd::{
+        collections::{HashMap, HashSet},
+        prelude::*,
+    },
 };
 
 // Inline zk token program id since it isn't available in the sdk

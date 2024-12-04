@@ -20,13 +20,16 @@
 
 use {
     lazy_static::lazy_static,
+    nostd::{
+        collections::{HashMap, HashSet},
+        prelude::*,
+    },
     solana_program::{epoch_schedule::EpochSchedule, stake_history::Epoch},
     solana_sdk::{
         clock::Slot,
         hash::{Hash, Hasher},
         pubkey::Pubkey,
     },
-    std::collections::{HashMap, HashSet},
 };
 
 pub mod deprecate_rewards_sysvar {

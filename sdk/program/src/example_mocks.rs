@@ -15,10 +15,6 @@
 
 pub mod solana_rpc_client {
     pub mod rpc_client {
-        #[cfg(not(feature = "std"))]
-        use hashbrown::HashMap;
-        #[cfg(feature = "std")]
-        use std::collections::HashMap;
         use {
             super::super::{
                 solana_rpc_client_api::client_error::Result as ClientResult,
@@ -27,8 +23,7 @@ pub mod solana_rpc_client {
                     transaction::Transaction,
                 },
             },
-            alloc::{rc::Rc, string::String},
-            core::cell::RefCell,
+            nostd::{cell::RefCell, collections::HashMap, prelude::*, rc::Rc},
         };
 
         #[derive(Default)]
@@ -130,7 +125,7 @@ pub mod solana_sdk {
     pub mod account {
         use {
             crate::{clock::Epoch, pubkey::Pubkey},
-            alloc::vec::Vec,
+            nostd::prelude::*,
         };
         #[derive(Clone)]
         pub struct Account {
@@ -212,7 +207,7 @@ pub mod solana_sdk {
                 message::{Message, VersionedMessage},
                 pubkey::Pubkey,
             },
-            alloc::{vec, vec::Vec},
+            nostd::prelude::*,
             serde_derive::Serialize,
         };
 

@@ -1,6 +1,6 @@
 //! A trait for sanitizing values and members of over the wire messages.
 
-use {alloc::vec::Vec, thiserror::Error};
+use {nostd::prelude::*, thiserror::Error};
 
 #[derive(PartialEq, Debug, Error, Eq, Clone)]
 pub enum SanitizeError {

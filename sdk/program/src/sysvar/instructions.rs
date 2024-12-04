@@ -45,7 +45,7 @@ use {
         sanitize::SanitizeError,
         serialize_utils::{read_pubkey, read_slice, read_u16, read_u8},
     },
-    alloc::vec::Vec,
+    nostd::prelude::*,
 };
 
 /// Instructions sysvar, dummy type.

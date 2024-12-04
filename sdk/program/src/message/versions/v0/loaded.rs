@@ -1,14 +1,10 @@
-#[cfg(not(feature = "std"))]
-use hashbrown::HashSet;
-#[cfg(feature = "std")]
-use std::collections::HashSet;
 use {
     crate::{
         bpf_loader_upgradeable,
         message::{v0, AccountKeys},
         pubkey::Pubkey,
     },
-    alloc::{borrow::Cow, vec::Vec},
+    nostd::{borrow::Cow, collections::HashSet, prelude::*},
 };
 
 /// Combination of a version #0 message and its loaded addresses

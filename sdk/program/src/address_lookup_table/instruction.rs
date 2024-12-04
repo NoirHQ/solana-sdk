@@ -6,7 +6,7 @@ use {
         pubkey::Pubkey,
         system_program,
     },
-    alloc::{vec, vec::Vec},
+    nostd::prelude::*,
     serde_derive::{Deserialize, Serialize},
 };
 
