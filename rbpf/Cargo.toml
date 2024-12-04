@@ -1,0 +1,60 @@
+[package]
+name = "solana_rbpf"
+version = "0.8.5"
+description = "Virtual machine and JIT compiler for eBPF programs"
+authors = ["Solana Maintainers <maintainers@solana.foundation>"]
+repository = "https://github.com/solana-labs/rbpf"
+homepage = "https://solana.com/"
+keywords = ["BPF", "eBPF", "interpreter", "JIT", "filtering"]
+license = "Apache-2.0"
+edition = "2018"
+
+include = [
+    "src/**",
+    "examples/**",
+    "tests/**",
+    "benches/**",
+    "LICENSE*",
+    "Cargo.toml",
+]
+
+[dependencies]
+arbitrary = { version = "1.0", optional = true, features = ["derive"] }
+byteorder = { version = "1.2", default-features = false }
+combine = "3.8.1"
+core2 = { version = "0.4.0", default-features = false, features = ["alloc"] }
+gdbstub = { version = "0.6.2", optional = true }
+hash32 = "0.2.0"
+hashbrown = { version = "0.15.2", features = ["alloc"] }
+log = { version = "0.4.2", default-features = false }
+rand = { version = "0.8.5", features = ["small_rng"] }
+rustc-demangle = { version = "0.1.24", default-features = false }
+scroll = "0.11"
+shuttle = { version = "0.7.1", optional = true }
+thiserror = { version = "2.0.3", default-features = false }
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["memoryapi", "sysinfoapi", "winnt", "errhandlingapi"], optional = true }
+
+[target.'cfg(not(windows))'.dependencies]
+libc = { version = "0.2", optional = true }
+
+[features]
+default = ["std"]
+std = [
+    "jit",
+    "byteorder/std",
+    "core2/std",
+    "log/std",
+    "rustc-demangle/std",
+    "thiserror/std",
+]
+jit = ["libc", "winapi"]
+fuzzer-not-safe-for-production = ["arbitrary"]
+debugger = ["gdbstub"]
+shuttle-test = ["dep:shuttle"]
+
+[dev-dependencies]
+elf = "0.0.10"
+json = "0.12"
+test_utils = { path = "test_utils/" }

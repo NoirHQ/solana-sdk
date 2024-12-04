@@ -17,7 +17,7 @@ use {
             },
         },
     },
-    alloc::{string::ToString, vec, vec::Vec},
+    alloc::{string::ToString, vec::Vec},
     serde_derive::{Deserialize, Serialize},
 };
 
@@ -249,7 +249,7 @@ pub struct CreateVoteAccountConfig<'a> {
     pub with_seed: Option<(&'a Pubkey, &'a str)>,
 }
 
-impl<'a> Default for CreateVoteAccountConfig<'a> {
+impl Default for CreateVoteAccountConfig<'_> {
     fn default() -> Self {
         Self {
             space: VoteStateVersions::vote_state_size_of(false) as u64,
