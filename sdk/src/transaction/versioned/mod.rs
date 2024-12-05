@@ -18,7 +18,7 @@ use {
 };
 #[cfg(feature = "scale")]
 use {
-    parity_scale_coodec::{Decode, Encode},
+    parity_scale_codec::{Decode, Encode},
     scale_info::TypeInfo,
 };
 

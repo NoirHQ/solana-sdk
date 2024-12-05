@@ -13,6 +13,11 @@ use {
     },
     thiserror::Error,
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode},
+    scale_info::TypeInfo,
+};
 
 /// Number of bytes in a signature
 pub const SIGNATURE_BYTES: usize = 64;
@@ -22,6 +27,7 @@ const MAX_BASE58_SIGNATURE_LEN: usize = 88;
 #[repr(transparent)]
 #[serde_with::serde_as]
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Serialize, Deserialize, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Signature(#[serde_as(as = "[_; SIGNATURE_BYTES]")] [u8; SIGNATURE_BYTES]);
 
