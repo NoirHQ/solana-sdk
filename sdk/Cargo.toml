@@ -38,9 +38,11 @@ std = [
   "libsecp256k1?/std",
   "log/std",
   "num_enum/std",
+  "parity-scale-codec?/std",
   "pbkdf2/std",
   "rand?/std",
   "rand0-7?/std",
+  "scale-info?/std",
   "serde/std",
   "serde_json?/std",
   "serde_with/std",
@@ -72,7 +74,11 @@ frozen-abi = [
   "dep:solana-frozen-abi-macro",
   "solana-program/frozen-abi",
 ]
-scale = ["solana-program/scale"]
+scale = [
+  "parity-scale-codec",
+  "scale-info",
+  "solana-program/scale",
+]
 
 [dependencies]
 bincode = { workspace = true }
@@ -96,12 +102,14 @@ log = { workspace = true }
 memmap2 = { workspace = true, optional = true }
 nostd = { workspace = true }
 num_enum = { workspace = true }
+parity-scale-codec = { workspace = true, optional = true }
 pbkdf2 = { workspace = true }
 qstring = { workspace = true }
 qualifier_attr = { workspace = true, optional = true }
 rand = { workspace = true, optional = true }
 rand0-7 = { package = "rand", version = "0.7", default-features = false, features = ["alloc"], optional = true }
 rustversion = { workspace = true }
+scale-info = { workspace = true, optional = true }
 serde = { workspace = true }
 serde_bytes = { workspace = true }
 serde_derive = { workspace = true }
