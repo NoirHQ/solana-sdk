@@ -16,6 +16,11 @@ use {
     nostd::{cmp::Ordering, prelude::*},
     serde::Serialize,
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_coodec::{Decode, Encode},
+    scale_info::TypeInfo,
+};
 
 mod sanitized;
 
@@ -48,6 +53,7 @@ impl TransactionVersion {
 // NOTE: Serialization-related changes must be paired with the direct read at sigverify.
 /// An atomic transaction
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Debug, PartialEq, Default, Eq, Clone, Serialize, Deserialize)]
 pub struct VersionedTransaction {
     /// List of signatures
