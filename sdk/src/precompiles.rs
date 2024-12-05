@@ -58,7 +58,8 @@ impl Precompile {
     where
         F: Fn(&Pubkey) -> bool,
     {
-        self.feature.is_none_or(|ref feature_id| is_enabled(feature_id))
+        self.feature
+            .is_none_or(|ref feature_id| is_enabled(feature_id))
             && self.program_id == *program_id
     }
     /// Verify this precompiled program
