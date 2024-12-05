@@ -1,7 +1,7 @@
 use {
+    nostd::hash::Hasher,
     siphasher::sip::SipHasher13,
     solana_sdk::{hash::Hash, pubkey::Pubkey},
-    std::hash::Hasher,
 };
 
 #[derive(Debug, Clone)]

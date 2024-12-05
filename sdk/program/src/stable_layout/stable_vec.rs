@@ -1,9 +1,6 @@
 //! `Vec`, with a stable memory layout
 
-use {
-    alloc::vec::Vec,
-    core::{marker::PhantomData, mem::ManuallyDrop, ptr::NonNull},
-};
+use nostd::{marker::PhantomData, mem::ManuallyDrop, prelude::*, ptr::NonNull};
 
 /// `Vec`, with a stable memory layout
 ///

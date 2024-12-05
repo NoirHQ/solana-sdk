@@ -22,7 +22,7 @@ use {
         pubkey::Pubkey,
         system_instruction, sysvar,
     },
-    alloc::{vec, vec::Vec},
+    nostd::prelude::*,
 };
 
 crate::declare_id!("BPFLoaderUpgradeab1e11111111111111111111111");

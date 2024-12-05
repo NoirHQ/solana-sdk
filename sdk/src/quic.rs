@@ -1,6 +1,9 @@
 #![cfg(feature = "full")]
 //! Definitions related to Solana over QUIC.
-use {crate::signer::keypair::Keypair, std::time::Duration};
+use {
+    crate::signer::keypair::Keypair,
+    nostd::{prelude::*, time::Duration},
+};
 
 pub const QUIC_PORT_OFFSET: u16 = 6;
 // Empirically found max number of concurrent streams
@@ -38,5 +41,5 @@ pub const QUIC_MIN_STAKED_RECEIVE_WINDOW_RATIO: u64 = 128;
 pub const QUIC_MAX_STAKED_RECEIVE_WINDOW_RATIO: u64 = 512;
 
 pub trait NotifyKeyUpdate {
-    fn update_key(&self, key: &Keypair) -> Result<(), Box<dyn std::error::Error>>;
+    fn update_key(&self, key: &Keypair) -> Result<(), Box<dyn core::error::Error>>;
 }

@@ -94,7 +94,7 @@ mod lib {
             ptr::{self, copy_nonoverlapping},
             str,
         },
-        core2::io,
+        nostd::io,
         hashbrown::{HashMap, HashSet},
     };
 }

@@ -15,32 +15,32 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-extern crate alloc;
-
 pub use bincode::{
     self as v2,
     error::{DecodeError, EncodeError},
 };
-use {
-    alloc::{boxed::Box, vec::Vec},
-    bincode::config,
-    serde::Serialize,
-};
+use {bincode::config, nostd::prelude::*, serde::Serialize};
+
+struct Writer<'a, T>(&'a mut T);
+
+impl<T: nostd::io::Write> bincode::enc::write::Writer for Writer<'_, T> {
+    fn write(&mut self, bytes: &[u8]) -> core::result::Result<(), EncodeError> {
+        self.0
+            .write_all(bytes)
+            .map_err(|_| EncodeError::Other("io error"))
+    }
+}
 
 /// Serializes an object directly into a `Writer` using the default configuration.
 ///
 /// If the serialization would take more bytes than allowed by the size limit, an error
 /// is returned and *no bytes* will be written into the `Writer`.
-//pub fn serialize_into<W, T: ?Sized>(writer: W, value: &T) -> Result<(), Error>
-//where
-//    W: std::io::Write,
-//    T: serde::Serialize,
-//{
-pub fn serialize_into<T>(writer: &mut [u8], value: &T) -> Result<(), Error>
+pub fn serialize_into<W, T>(mut writer: W, value: &T) -> Result<()>
 where
+    W: nostd::io::Write,
     T: ?Sized + serde::Serialize,
 {
-    let writer = bincode::enc::write::SliceWriter::new(writer);
+    let writer = Writer(&mut writer);
     Ok(bincode::serde::encode_into_writer(
         value,
         writer,
@@ -49,7 +49,7 @@ where
 }
 
 /// Serializes a serializable object into a `Vec` of bytes using the default configuration.
-pub fn serialize<T>(value: &T) -> Result<Vec<u8>, Error>
+pub fn serialize<T>(value: &T) -> Result<Vec<u8>>
 where
     T: ?Sized + Serialize,
 {
@@ -57,7 +57,7 @@ where
 }
 
 /// Deserializes a slice of bytes into an instance of `T` using the default configuration.
-pub fn deserialize<'a, T>(bytes: &'a [u8]) -> Result<T, Error>
+pub fn deserialize<'a, T>(bytes: &'a [u8]) -> Result<T>
 where
     T: serde::de::Deserialize<'a>,
 {
@@ -69,7 +69,7 @@ where
 
 /// Returns the size that an object would be if serialized using Bincode with the default
 /// configuration.
-pub fn serialized_size<T>(value: &T) -> Result<u64, Error>
+pub fn serialized_size<T>(value: &T) -> Result<u64>
 where
     T: ?Sized + serde::Serialize,
 {
@@ -77,6 +77,8 @@ where
     bincode::serde::encode_into_writer(value, &mut writer, config::legacy())?;
     Ok(writer.bytes_written as u64)
 }
+
+pub type Result<T> = core::result::Result<T, Error>;
 
 pub type Error = Box<ErrorKind>;
 
@@ -90,11 +92,13 @@ pub enum ErrorKind {
     Encode(EncodeError),
 
     // for tests
+    #[error("{0}")]
+    Other(&'static str),
     #[cfg(feature = "std")]
     #[error("{0}")]
     Custom(String),
     #[cfg(feature = "std")]
-    #[error("{0}")]
+    #[error("io error: {0}")]
     Io(std::io::Error),
 }
 

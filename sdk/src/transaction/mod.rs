@@ -127,10 +127,10 @@ use {
         signature::{Signature, SignerError},
         signers::Signers,
     },
+    nostd::{prelude::*, result},
     serde::Serialize,
     solana_program::{system_instruction::SystemInstruction, system_program},
     solana_sdk::feature_set,
-    std::result,
 };
 
 mod error;
@@ -213,7 +213,7 @@ pub struct Transaction {
 }
 
 impl Sanitize for Transaction {
-    fn sanitize(&self) -> std::result::Result<(), SanitizeError> {
+    fn sanitize(&self) -> core::result::Result<(), SanitizeError> {
         if self.message.header.num_required_signatures as usize > self.signatures.len() {
             return Err(SanitizeError::IndexOutOfBounds);
         }

@@ -9,10 +9,10 @@
 pub use crate::clock::Slot;
 use {
     crate::hash::Hash,
-    alloc::vec::Vec,
-    core::{
+    nostd::{
         iter::FromIterator,
         ops::Deref,
+        prelude::*,
         sync::atomic::{AtomicUsize, Ordering},
     },
 };

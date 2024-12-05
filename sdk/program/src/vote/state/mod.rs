@@ -18,10 +18,8 @@ use {
         sysvar::clock::Clock,
         vote::{authorized_voters::AuthorizedVoters, error::VoteError},
     },
-    alloc::{collections::VecDeque, string::String, vec::Vec},
     bincode::{serialize_into, serialized_size, ErrorKind},
-    core::fmt::Debug,
-    core2::io::Cursor,
+    nostd::{collections::VecDeque, io::Cursor, prelude::*},
     serde_derive::{Deserialize, Serialize},
 };
 

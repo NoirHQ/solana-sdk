@@ -2,7 +2,7 @@
 
 #![cfg(feature = "full")]
 
-use {std::str::FromStr, thiserror::Error};
+use {nostd::str::FromStr, thiserror::Error};
 
 #[derive(Serialize, Deserialize, Default, Clone, Copy, Debug, PartialEq, Eq, Hash)]
 #[serde(rename_all = "camelCase")]
@@ -112,8 +112,8 @@ impl FromStr for CommitmentLevel {
     }
 }
 
-impl std::fmt::Display for CommitmentLevel {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Display for CommitmentLevel {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         let s = match self {
             CommitmentLevel::Processed => "processed",
             CommitmentLevel::Confirmed => "confirmed",

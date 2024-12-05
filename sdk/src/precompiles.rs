@@ -8,6 +8,7 @@ use {
         pubkey::Pubkey,
     },
     lazy_static::lazy_static,
+    nostd::prelude::*,
     thiserror::Error,
 };
 
@@ -32,7 +33,7 @@ impl<T> DecodeError<T> for PrecompileError {
 }
 
 /// All precompiled programs must implement the `Verify` function
-pub type Verify = fn(&[u8], &[&[u8]], &FeatureSet) -> std::result::Result<(), PrecompileError>;
+pub type Verify = fn(&[u8], &[&[u8]], &FeatureSet) -> core::result::Result<(), PrecompileError>;
 
 /// Information on a precompiled program
 pub struct Precompile {
@@ -58,7 +59,7 @@ impl Precompile {
         F: Fn(&Pubkey) -> bool,
     {
         self.feature
-            .map_or(true, |ref feature_id| is_enabled(feature_id))
+            .is_none_or(|ref feature_id| is_enabled(feature_id))
             && self.program_id == *program_id
     }
     /// Verify this precompiled program
@@ -67,7 +68,7 @@ impl Precompile {
         data: &[u8],
         instruction_datas: &[&[u8]],
         feature_set: &FeatureSet,
-    ) -> std::result::Result<(), PrecompileError> {
+    ) -> core::result::Result<(), PrecompileError> {
         (self.verify_fn)(data, instruction_datas, feature_set)
     }
 }

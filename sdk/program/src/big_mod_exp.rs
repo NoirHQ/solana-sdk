@@ -1,4 +1,4 @@
-use alloc::{vec, vec::Vec};
+use nostd::prelude::*;
 
 #[repr(C)]
 pub struct BigModExpParams {

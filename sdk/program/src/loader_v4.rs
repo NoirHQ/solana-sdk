@@ -9,7 +9,7 @@ use {
         pubkey::Pubkey,
         system_instruction,
     },
-    alloc::{vec, vec::Vec},
+    nostd::prelude::*,
 };
 
 crate::declare_id!("LoaderV411111111111111111111111111111111111");

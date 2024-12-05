@@ -3,24 +3,23 @@
 // warnings from uses of deprecated types during trait derivations.
 #![allow(deprecated)]
 
-use crate::{
-    clock::{Clock, Epoch, UnixTimestamp},
-    instruction::InstructionError,
-    pubkey::Pubkey,
-    stake::{
-        instruction::{LockupArgs, StakeError},
-        stake_flags::StakeFlags,
+use {
+    crate::{
+        clock::{Clock, Epoch, UnixTimestamp},
+        instruction::InstructionError,
+        pubkey::Pubkey,
+        stake::{
+            instruction::{LockupArgs, StakeError},
+            stake_flags::StakeFlags,
+        },
+        stake_history::{StakeHistory, StakeHistoryEntry},
     },
-    stake_history::{StakeHistory, StakeHistoryEntry},
+    nostd::collections::HashSet,
 };
-#[cfg(not(feature = "std"))]
-use hashbrown::HashSet;
-#[cfg(feature = "std")]
-use std::collections::HashSet;
 #[cfg(feature = "borsh")]
 use {
-    alloc::string::ToString,
-    borsh::{io, BorshDeserialize, BorshSchema, BorshSerialize},
+    borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
+    nostd::prelude::*,
 };
 
 pub type StakeActivationStatus = StakeHistoryEntry;
@@ -41,9 +40,9 @@ pub fn warmup_cooldown_rate(current_epoch: Epoch, new_rate_activation_epoch: Opt
 
 #[cfg(feature = "borsh")]
 macro_rules! impl_borsh_stake_state {
-    ($borsh:ident) => {
+    ($borsh:ident, $(::$io:ident)*) => {
         impl $borsh::BorshDeserialize for StakeState {
-            fn deserialize_reader<R: io::Read>(reader: &mut R) -> io::Result<Self> {
+            fn deserialize_reader<R: $(::$io)*::Read>(reader: &mut R) -> $(::$io)*::Result<Self> {
                 let enum_value: u32 = $borsh::BorshDeserialize::deserialize_reader(reader)?;
                 match enum_value {
                     0 => Ok(StakeState::Uninitialized),
@@ -57,15 +56,15 @@ macro_rules! impl_borsh_stake_state {
                         Ok(StakeState::Stake(meta, stake))
                     }
                     3 => Ok(StakeState::RewardsPool),
-                    _ => Err(io::Error::new(
-                        io::ErrorKind::InvalidData,
+                    _ => Err($(::$io)*::Error::new(
+                        $(::$io)*::ErrorKind::InvalidData,
                         "Invalid enum value",
                     )),
                 }
             }
         }
         impl $borsh::BorshSerialize for StakeState {
-            fn serialize<W: io::Write>(&self, writer: &mut W) -> io::Result<()> {
+            fn serialize<W: $(::$io)*::Write>(&self, writer: &mut W) -> $(::$io)*::Result<()> {
                 match self {
                     StakeState::Uninitialized => writer.write_all(&0u32.to_le_bytes()),
                     StakeState::Initialized(meta) => {
@@ -98,9 +97,9 @@ pub enum StakeState {
     RewardsPool,
 }
 #[cfg(feature = "borsh")]
-impl_borsh_stake_state!(borsh);
+impl_borsh_stake_state!(borsh, ::borsh::io);
 #[cfg(feature = "borsh")]
-impl_borsh_stake_state!(borsh0_10);
+impl_borsh_stake_state!(borsh0_10, ::borsh0_10::maybestd::io);
 impl StakeState {
     /// The fixed number of bytes used to serialize each stake account
     pub const fn size_of() -> usize {
@@ -154,9 +153,9 @@ pub enum StakeStateV2 {
 }
 #[cfg(feature = "borsh")]
 macro_rules! impl_borsh_stake_state_v2 {
-    ($borsh:ident) => {
+    ($borsh:ident, $(::$io:ident)*) => {
         impl $borsh::BorshDeserialize for StakeStateV2 {
-            fn deserialize_reader<R: io::Read>(reader: &mut R) -> io::Result<Self> {
+            fn deserialize_reader<R: $(::$io)*::Read>(reader: &mut R) -> $(::$io)*::Result<Self> {
                 let enum_value: u32 = $borsh::BorshDeserialize::deserialize_reader(reader)?;
                 match enum_value {
                     0 => Ok(StakeStateV2::Uninitialized),
@@ -172,15 +171,15 @@ macro_rules! impl_borsh_stake_state_v2 {
                         Ok(StakeStateV2::Stake(meta, stake, stake_flags))
                     }
                     3 => Ok(StakeStateV2::RewardsPool),
-                    _ => Err(io::Error::new(
-                        io::ErrorKind::InvalidData,
+                    _ => Err($(::$io)*::Error::new(
+                        $(::$io)*::ErrorKind::InvalidData,
                         "Invalid enum value",
                     )),
                 }
             }
         }
         impl $borsh::BorshSerialize for StakeStateV2 {
-            fn serialize<W: io::Write>(&self, writer: &mut W) -> io::Result<()> {
+            fn serialize<W: $(::$io)*::Write>(&self, writer: &mut W) -> $(::$io)*::Result<()> {
                 match self {
                     StakeStateV2::Uninitialized => writer.write_all(&0u32.to_le_bytes()),
                     StakeStateV2::Initialized(meta) => {
@@ -200,9 +199,9 @@ macro_rules! impl_borsh_stake_state_v2 {
     };
 }
 #[cfg(feature = "borsh")]
-impl_borsh_stake_state_v2!(borsh);
+impl_borsh_stake_state_v2!(borsh, ::borsh::io);
 #[cfg(feature = "borsh")]
-impl_borsh_stake_state_v2!(borsh0_10);
+impl_borsh_stake_state_v2!(borsh0_10, ::borsh0_10::maybestd::io);
 
 impl StakeStateV2 {
     /// The fixed number of bytes used to serialize each stake account

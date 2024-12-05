@@ -5,11 +5,10 @@
 pub use crate::signer::{keypair::*, null_signer::*, presigner::*, *};
 use {
     crate::pubkey::Pubkey,
-    generic_array::{typenum::U64, GenericArray},
-    std::{
+    nostd::{
         borrow::{Borrow, Cow},
-        convert::TryInto,
         fmt,
+        prelude::*,
         str::FromStr,
     },
     thiserror::Error,
@@ -21,15 +20,23 @@ pub const SIGNATURE_BYTES: usize = 64;
 const MAX_BASE58_SIGNATURE_LEN: usize = 88;
 
 #[repr(transparent)]
+#[serde_with::serde_as]
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
-#[derive(Serialize, Deserialize, Clone, Copy, Default, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct Signature(GenericArray<u8, U64>);
+#[derive(Serialize, Deserialize, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct Signature(#[serde_as(as = "[_; SIGNATURE_BYTES]")] [u8; SIGNATURE_BYTES]);
 
 impl crate::sanitize::Sanitize for Signature {}
 
+impl Default for Signature {
+    fn default() -> Self {
+        Self([0u8; SIGNATURE_BYTES])
+    }
+}
+
 impl Signature {
+    #[cfg(feature = "std")]
     pub fn new_unique() -> Self {
-        Self::from(std::array::from_fn(|_| rand::random()))
+        Self::from(core::array::from_fn(|_| rand::random()))
     }
 
     pub(self) fn verify_verbose(
@@ -83,14 +90,14 @@ impl fmt::Display for Signature {
 
 impl From<Signature> for [u8; 64] {
     fn from(signature: Signature) -> Self {
-        signature.0.into()
+        signature.0
     }
 }
 
 impl From<[u8; SIGNATURE_BYTES]> for Signature {
     #[inline]
     fn from(signature: [u8; SIGNATURE_BYTES]) -> Self {
-        Self(GenericArray::from(signature))
+        Self(signature)
     }
 }
 

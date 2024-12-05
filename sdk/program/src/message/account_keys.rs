@@ -4,8 +4,7 @@ use {
         message::{v0::LoadedAddresses, CompileError},
         pubkey::Pubkey,
     },
-    alloc::{collections::BTreeMap, vec::Vec},
-    core::{iter::zip, ops::Index},
+    nostd::{collections::BTreeMap, iter::zip, ops::Index, prelude::*},
 };
 
 /// Collection of static and dynamically loaded keys used to load accounts

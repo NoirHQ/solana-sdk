@@ -24,12 +24,12 @@
 //! [sp]: crate::secp256k1_program
 //! [`ecrecover`]: https://docs.soliditylang.org/en/v0.8.14/units-and-global-variables.html?highlight=ecrecover#mathematical-and-cryptographic-functions
 
+use thiserror::Error;
 #[cfg(feature = "borsh")]
 use {
-    alloc::string::ToString,
     borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
+    nostd::prelude::*,
 };
-use {core::convert::TryFrom, thiserror::Error};
 
 #[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub enum Secp256k1RecoverError {

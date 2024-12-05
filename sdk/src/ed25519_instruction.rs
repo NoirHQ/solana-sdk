@@ -13,6 +13,7 @@ use {
     bytemuck::bytes_of,
     bytemuck_derive::{Pod, Zeroable},
     ed25519_dalek::{ed25519::signature::Signature, Signer, Verifier},
+    nostd::prelude::*,
 };
 
 pub const PUBKEY_SERIALIZED_SIZE: usize = 32;

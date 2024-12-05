@@ -1,5 +1,6 @@
 use {
     crate::instruction::CompiledInstruction,
+    nostd::prelude::*,
     serde::{Deserialize, Serialize},
 };
 

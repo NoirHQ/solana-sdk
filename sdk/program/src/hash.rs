@@ -8,14 +8,14 @@ use crate::wasm_bindgen;
 use {
     crate::sanitize::Sanitize,
     bytemuck_derive::{Pod, Zeroable},
-    core::{convert::TryFrom, fmt, mem, str::FromStr},
+    nostd::{fmt, mem, str::FromStr},
     sha2::{Digest, Sha256},
     thiserror::Error,
 };
 #[cfg(feature = "borsh")]
 use {
-    alloc::string::ToString,
     borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
+    nostd::prelude::*,
 };
 #[cfg(feature = "scale")]
 use {

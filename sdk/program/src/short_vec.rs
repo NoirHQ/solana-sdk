@@ -2,8 +2,7 @@
 
 #![allow(clippy::arithmetic_side_effects)]
 use {
-    alloc::vec::Vec,
-    core::{convert::TryFrom, fmt, marker::PhantomData},
+    nostd::{fmt, marker::PhantomData, prelude::*},
     serde::{
         de::{self, Deserializer, SeqAccess, Visitor},
         ser::{self, SerializeTuple, Serializer},

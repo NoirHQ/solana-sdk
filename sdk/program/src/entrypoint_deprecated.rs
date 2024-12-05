@@ -12,10 +12,11 @@
 extern crate alloc;
 use {
     crate::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey},
-    alloc::{rc::Rc, vec::Vec},
-    core::{
+    nostd::{
         cell::RefCell,
         mem::size_of,
+        prelude::*,
+        rc::Rc,
         result::Result as ResultGeneric,
         slice::{from_raw_parts, from_raw_parts_mut},
     },

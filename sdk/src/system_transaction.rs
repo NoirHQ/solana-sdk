@@ -1,13 +1,16 @@
 //! The `system_transaction` module provides functionality for creating system transactions.
 #![cfg(feature = "full")]
 
-use crate::{
-    hash::Hash,
-    message::Message,
-    pubkey::Pubkey,
-    signature::{Keypair, Signer},
-    system_instruction,
-    transaction::Transaction,
+use {
+    crate::{
+        hash::Hash,
+        message::Message,
+        pubkey::Pubkey,
+        signature::{Keypair, Signer},
+        system_instruction,
+        transaction::Transaction,
+    },
+    nostd::prelude::*,
 };
 
 /// Create and sign new SystemInstruction::CreateAccount transaction

@@ -3,7 +3,7 @@ resolver = "2"
 members = [
   "bincode",
   "rbpf",
-  #"sdk",
+  "sdk",
   "sdk/macro",
   "sdk/program",
 ]
@@ -32,47 +32,64 @@ borsh = { version = "1.5.1", default-features = false, features = ["derive", "un
 bs58 = { version = "0.5.1", default-features = false, features = ["alloc"] }
 bytemuck = "1.16.1"
 bytemuck_derive = "1.7.0"
+byteorder = { version = "1.5.0", default-features = false }
+chrono = { version = "0.4.38", default-features = false }
 console_error_panic_hook = "0.1.7"
 console_log = "0.2.2"
 curve25519-dalek = "3.2.1"
+derivation-path = { version = "0.2.0", default-features = false }
+digest = { version = "0.10.7", default-features = false }
+ed25519-dalek = { version = "=1.0.1", default-features = false }
+ed25519-dalek-bip32 = { version = "0.2.0", default-features = false }
 getrandom = { version = "0.2.10", default-features = false }
+hex = "0.4.3"
+hmac = { version = "0.12.1", default-features = false }
 itertools = "0.12.1"
 js-sys = "0.3.69"
 lazy_static = { version = "1.4.0", default-features = false }
 libsecp256k1 = { version = "0.6.0", default-features = false }
 log = { version = "0.4.21", default-features = false }
+memmap2 = "0.5.10"
 memoffset = "0.9"
 num-bigint = { version = "0.4.5", default-features = false }
 num-derive = "0.4.2"
 num-traits = { version = "0.2", default-features = false }
+num_enum = { version = "0.7.2", default-features = false }
 parity-scale-codec = { version = "3.6", default-features = false, features = ["derive", "max-encoded-len"] }
+pbkdf2 = { version = "0.11.0", default-features = false }
 proc-macro2 = "1.0.85"
+qstring = "0.7.2"
 qualifier_attr = { version = "0.2.2", default-features = false }
 quote = "1.0"
-rand = "0.8.5"
+rand = { version = "0.8.5", default-features = false, features = ["alloc"] }
 rustc_version = "0.4"
 rustversion = "1.0.18"
 scale-info = { version = "2.11", default-features = false, features = ["derive"] }
 serde = { version = "1.0.203", default-features = false }
 serde_bytes = "0.11.14"
 serde_derive = "1.0.203"
-serde_json = "1.0.117"
+serde_json = { version = "1.0.117", default-features = false, features = ["alloc"] }
+serde_with = { version = "2.3.3", default-features = false }
 sha2 = { version = "0.10.8", default-features = false }
 sha3 = { version = "0.10.8", default-features = false }
+siphasher = { version = "0.3.11", default-features = false }
 solana-frozen-abi = "=2.0.18"
 solana-frozen-abi-macro = "=2.0.18"
 solana-logger = "=2.0.18"
+solana-program = { path = "sdk/program", default-features = false }
 solana-sdk-macro = { path = "sdk/macro" }
 spin = "0.9.8"
 static_assertions = "1.1.0"
 syn = "2.0"
+tiny-bip39 = "0.8.2"
+uriparse = "0.6.4"
 wasm-bindgen = { version = "0.2", default-features = false }
 
 # Bumped dependencies to support no_std
 bincode = { package = "solana-bincode", path = "bincode", default-features = false }
 bv = { git = "https://github.com/conr2d/bv-rs", branch = "no_std", features = ["serde"] }
-core2 = { version = "0.4.0", default-features = false, features = ["alloc"] }
 hashbrown = "0.15"
+nostd = { version = "0.1", features = ["hashbrown", "io"] }
 thiserror = { version = "2.0", default-features = false }
 
 # Our dependency tree has `curve25519-dalek` v3.2.1.  They have removed the

@@ -6,11 +6,13 @@
 
 use {
     crate::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey},
-    alloc::{alloc::Layout, rc::Rc, vec::Vec},
-    core::{
+    nostd::{
+        alloc::Layout,
         cell::RefCell,
         mem::size_of,
+        prelude::*,
         ptr::null_mut,
+        rc::Rc,
         result::Result as ResultGeneric,
         slice::{from_raw_parts, from_raw_parts_mut},
     },

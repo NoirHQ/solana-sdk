@@ -4,13 +4,13 @@
 
 use {
     crate::sanitize::Sanitize,
-    core::{convert::TryFrom, fmt, mem, str::FromStr},
+    nostd::{fmt, mem, str::FromStr},
     thiserror::Error,
 };
 #[cfg(feature = "borsh")]
 use {
-    alloc::string::ToString,
     borsh::{BorshDeserialize, BorshSchema, BorshSerialize},
+    nostd::prelude::*,
 };
 
 /// Size of a hash in bytes.

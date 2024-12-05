@@ -6,7 +6,7 @@ use {
         vote::state::{BlockTimestamp, LandedVote, Lockout, VoteState, MAX_ITEMS},
     },
     bincode::serialized_size,
-    core2::io::Cursor,
+    nostd::io::Cursor,
 };
 
 pub(super) fn deserialize_vote_state_into(

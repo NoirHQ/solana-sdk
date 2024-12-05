@@ -1,15 +1,16 @@
 //! The definition of a Solana network packet.
 
 use {
-    bincode::{Options, Result},
+    bincode::Result,
     bitflags::bitflags,
-    serde::{Deserialize, Serialize},
-    serde_with::{serde_as, Bytes},
-    std::{
+    nostd::{
         fmt, io,
         net::{IpAddr, Ipv4Addr, SocketAddr},
+        prelude::*,
         slice::SliceIndex,
     },
+    serde::{Deserialize, Serialize},
+    serde_with::{serde_as, Bytes},
 };
 
 #[cfg(test)]
@@ -173,11 +174,14 @@ impl Packet {
         I: SliceIndex<[u8], Output = [u8]>,
     {
         let bytes = self.data(index).ok_or(bincode::ErrorKind::SizeLimit)?;
-        bincode::options()
-            .with_limit(PACKET_DATA_SIZE as u64)
-            .with_fixint_encoding()
-            .reject_trailing_bytes()
-            .deserialize(bytes)
+        let (result, bytes_read) =
+            bincode::v2::serde::decode_from_slice(bytes, bincode::v2::config::legacy())?;
+        if bytes_read < bytes.len() {
+            return Err(Box::new(bincode::ErrorKind::Other(
+                "Slice had bytes remaining after deserialization",
+            )));
+        }
+        Ok(result)
     }
 }
 
@@ -195,7 +199,7 @@ impl fmt::Debug for Packet {
 #[allow(clippy::uninit_assumed_init)]
 impl Default for Packet {
     fn default() -> Self {
-        let buffer = std::mem::MaybeUninit::<[u8; PACKET_DATA_SIZE]>::uninit();
+        let buffer = core::mem::MaybeUninit::<[u8; PACKET_DATA_SIZE]>::uninit();
         Self {
             buffer: unsafe { buffer.assume_init() },
             meta: Meta::default(),

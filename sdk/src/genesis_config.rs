@@ -19,16 +19,18 @@ use {
         system_program,
         timing::years_as_slots,
     },
-    bincode::{deserialize, serialize},
+    bincode::serialize,
     chrono::{TimeZone, Utc},
+    nostd::{collections::BTreeMap, fmt, prelude::*, str::FromStr},
+};
+#[cfg(feature = "std")]
+use {
+    bincode::deserialize,
     memmap2::Mmap,
     std::{
-        collections::BTreeMap,
-        fmt,
         fs::{File, OpenOptions},
         io::Write,
         path::{Path, PathBuf},
-        str::FromStr,
         time::{SystemTime, UNIX_EPOCH},
     },
 };
@@ -136,6 +138,9 @@ pub fn create_genesis_config(lamports: u64) -> (GenesisConfig, Keypair) {
 impl Default for GenesisConfig {
     fn default() -> Self {
         Self {
+            #[cfg(not(feature = "std"))]
+            creation_time: 0,
+            #[cfg(feature = "std")]
             creation_time: SystemTime::now()
                 .duration_since(UNIX_EPOCH)
                 .unwrap()
@@ -177,10 +182,12 @@ impl GenesisConfig {
         hash(&serialized)
     }
 
+    #[cfg(feature = "std")]
     fn genesis_filename(ledger_path: &Path) -> PathBuf {
         Path::new(ledger_path).join(DEFAULT_GENESIS_FILE)
     }
 
+    #[cfg(feature = "std")]
     pub fn load(ledger_path: &Path) -> Result<Self, std::io::Error> {
         let filename = Self::genesis_filename(ledger_path);
         let file = OpenOptions::new()
@@ -210,6 +217,7 @@ impl GenesisConfig {
         Ok(genesis_config)
     }
 
+    #[cfg(feature = "std")]
     pub fn write(&self, ledger_path: &Path) -> Result<(), std::io::Error> {
         let serialized = serialize(&self).map_err(|err| {
             std::io::Error::new(

@@ -1,10 +1,12 @@
 //! The `timing` module provides std::time utility functions.
+#[cfg(feature = "std")]
+use std::{
+    sync::atomic::Ordering,
+    time::{SystemTime, UNIX_EPOCH},
+};
 use {
     crate::unchecked_div_by_const,
-    std::{
-        sync::atomic::{AtomicU64, Ordering},
-        time::{Duration, SystemTime, UNIX_EPOCH},
-    },
+    nostd::{sync::atomic::AtomicU64, time::Duration},
 };
 
 pub fn duration_as_ns(d: &Duration) -> u64 {
@@ -33,6 +35,7 @@ pub fn duration_as_s(d: &Duration) -> f32 {
 }
 
 /// return timestamp as ms
+#[cfg(feature = "std")]
 pub fn timestamp() -> u64 {
     let now = SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -67,9 +70,11 @@ pub fn slot_duration_from_slots_per_year(slots_per_year: f64) -> Duration {
 
 #[derive(Debug, Default)]
 pub struct AtomicInterval {
+    #[cfg_attr(not(feature = "std"), allow(dead_code))]
     last_update: AtomicU64,
 }
 
+#[cfg(feature = "std")]
 impl AtomicInterval {
     /// true if 'interval_time_ms' has elapsed since last time we returned true as long as it has been 'interval_time_ms' since this struct was created
     pub fn should_update(&self, interval_time_ms: u64) -> bool {

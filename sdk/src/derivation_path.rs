@@ -10,13 +10,8 @@
 //! with 501 being the Solana coin type.
 
 use {
-    core::{iter::IntoIterator, slice::Iter},
     derivation_path::{ChildIndex, DerivationPath as DerivationPathInner},
-    std::{
-        convert::{Infallible, TryFrom},
-        fmt,
-        str::FromStr,
-    },
+    nostd::{convert::Infallible, fmt, iter::IntoIterator, prelude::*, slice::Iter, str::FromStr},
     thiserror::Error,
     uriparse::URIReference,
 };
@@ -241,8 +236,8 @@ impl AsRef<str> for QueryKey {
     }
 }
 
-impl std::fmt::Display for QueryKey {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl core::fmt::Display for QueryKey {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         let s: &str = self.as_ref();
         write!(f, "{s}")
     }

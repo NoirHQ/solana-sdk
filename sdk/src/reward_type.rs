@@ -1,6 +1,6 @@
 //! Enumeration of reward types.
 
-use std::fmt;
+use nostd::fmt;
 
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample, AbiEnumVisitor))]
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone, Copy)]

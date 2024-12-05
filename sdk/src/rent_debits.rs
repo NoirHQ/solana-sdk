@@ -1,6 +1,6 @@
 use {
+    nostd::collections::HashMap,
     solana_sdk::{pubkey::Pubkey, reward_info::RewardInfo, reward_type::RewardType},
-    std::collections::HashMap,
 };
 
 #[derive(Clone, Debug, PartialEq, Eq)]

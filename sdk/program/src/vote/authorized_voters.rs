@@ -2,7 +2,7 @@
 use arbitrary::Arbitrary;
 use {
     crate::{clock::Epoch, pubkey::Pubkey},
-    alloc::{collections::BTreeMap, vec::Vec},
+    nostd::{collections::BTreeMap, prelude::*},
     serde_derive::{Deserialize, Serialize},
 };
 

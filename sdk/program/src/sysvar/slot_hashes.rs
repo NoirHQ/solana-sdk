@@ -55,8 +55,8 @@ use {
         slot_hashes::MAX_ENTRIES,
         sysvar::{get_sysvar, Sysvar, SysvarId},
     },
-    alloc::{vec, vec::Vec},
     bytemuck_derive::{Pod, Zeroable},
+    nostd::prelude::*,
 };
 
 crate::declare_sysvar_id!("SysvarS1otHashes111111111111111111111111111", SlotHashes);

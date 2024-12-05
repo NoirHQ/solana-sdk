@@ -1,5 +1,7 @@
 #![cfg(feature = "full")]
 
+#[cfg(feature = "std")]
+use std::path::Path;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 use {
@@ -12,18 +14,40 @@ use {
     ed25519_dalek::Signer as DalekSigner,
     ed25519_dalek_bip32::Error as Bip32Error,
     hmac::Hmac,
-    rand0_7::{rngs::OsRng, CryptoRng, RngCore},
-    std::{
+    nostd::{
         error,
         io::{Read, Write},
-        path::Path,
+        prelude::*,
     },
+    rand0_7::{rngs::OsRng, CryptoRng, RngCore},
 };
 
 /// A vanilla Ed25519 key pair
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug)]
 pub struct Keypair(ed25519_dalek::Keypair);
+
+#[cfg(not(feature = "std"))]
+#[derive(Debug, thiserror::Error)]
+#[error("{0}")]
+pub struct SignatureError(String);
+
+#[cfg(not(feature = "std"))]
+impl SignatureError {
+    pub fn from_source(source: String) -> Self {
+        Self(source)
+    }
+}
+
+#[cfg(not(feature = "std"))]
+impl From<ed25519_dalek::SignatureError> for SignatureError {
+    fn from(e: ed25519_dalek::SignatureError) -> Self {
+        Self(e.to_string())
+    }
+}
+
+#[cfg(feature = "std")]
+pub type SignatureError = ed25519_dalek::SignatureError;
 
 impl Keypair {
     /// Can be used for generating a Keypair without a dependency on `rand` types
@@ -44,9 +68,9 @@ impl Keypair {
     }
 
     /// Recovers a `Keypair` from a byte array
-    pub fn from_bytes(bytes: &[u8]) -> Result<Self, ed25519_dalek::SignatureError> {
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, SignatureError> {
         if bytes.len() < ed25519_dalek::KEYPAIR_LENGTH {
-            return Err(ed25519_dalek::SignatureError::from_source(String::from(
+            return Err(SignatureError::from_source(String::from(
                 "candidate keypair byte array is too short",
             )));
         }
@@ -57,7 +81,7 @@ impl Keypair {
         let expected_public = ed25519_dalek::PublicKey::from(&secret);
         (public == expected_public)
             .then_some(Self(ed25519_dalek::Keypair { secret, public }))
-            .ok_or(ed25519_dalek::SignatureError::from_source(String::from(
+            .ok_or(SignatureError::from_source(String::from(
                 "keypair bytes do not specify same pubkey as derived from their secret key",
             )))
     }
@@ -134,6 +158,12 @@ where
 }
 
 impl EncodableKey for Keypair {
+    #[cfg(not(feature = "std"))]
+    fn read<R: Read>(_: &mut R) -> Result<Self, Box<dyn error::Error>> {
+        Err("Not supported in no_std".into())
+    }
+
+    #[cfg(feature = "std")]
     fn read<R: Read>(reader: &mut R) -> Result<Self, Box<dyn error::Error>> {
         read_keypair(reader)
     }
@@ -174,13 +204,15 @@ impl EncodableKeypair for Keypair {
 }
 
 /// Reads a JSON-encoded `Keypair` from a `Reader` implementor
+#[cfg(feature = "std")]
 pub fn read_keypair<R: Read>(reader: &mut R) -> Result<Keypair, Box<dyn error::Error>> {
     let bytes: Vec<u8> = serde_json::from_reader(reader)?;
     Keypair::from_bytes(&bytes)
-        .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e.to_string()).into())
+        .map_err(|e| nostd::io::Error::new(nostd::io::ErrorKind::Other, e.to_string()).into())
 }
 
 /// Reads a `Keypair` from a file
+#[cfg(feature = "std")]
 pub fn read_keypair_file<F: AsRef<Path>>(path: F) -> Result<Keypair, Box<dyn error::Error>> {
     Keypair::read_from_file(path)
 }
@@ -197,6 +229,7 @@ pub fn write_keypair<W: Write>(
 }
 
 /// Writes a `Keypair` to a file with JSON-encoding
+#[cfg(feature = "std")]
 pub fn write_keypair_file<F: AsRef<Path>>(
     keypair: &Keypair,
     outfile: F,

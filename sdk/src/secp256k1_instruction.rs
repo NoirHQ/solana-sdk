@@ -796,6 +796,7 @@ use {
         precompiles::PrecompileError,
     },
     digest::Digest,
+    nostd::prelude::*,
     serde_derive::{Deserialize, Serialize},
 };
 
@@ -893,7 +894,7 @@ pub fn new_secp256k1_instruction(
         message_data_size: message_arr.len() as u16,
         message_instruction_index: 0,
     };
-    let writer = std::io::Cursor::new(&mut instruction_data[1..DATA_START]);
+    let writer = nostd::io::Cursor::new(&mut instruction_data[1..DATA_START]);
     bincode::serialize_into(writer, &offsets).unwrap();
 
     Instruction {

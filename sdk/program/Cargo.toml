@@ -20,11 +20,10 @@ bs58 = { workspace = true }
 bv = { workspace = true, features = ["serde"] }
 bytemuck = { workspace = true }
 bytemuck_derive = { workspace = true }
-core2 = { workspace = true }
-hashbrown = { workspace = true }
 lazy_static = { workspace = true }
 log = { workspace = true }
 memoffset = { workspace = true }
+nostd = { workspace = true }
 num-derive = { workspace = true }
 num-traits = { workspace = true, features = ["i128"] }
 parity-scale-codec = { workspace = true, optional = true }
@@ -80,7 +79,7 @@ anyhow = { workspace = true }
 array-bytes = { workspace = true }
 assert_matches = { workspace = true }
 itertools = { workspace = true }
-serde_json = { workspace = true }
+serde_json = { workspace = true, default-features = true }
 static_assertions = { workspace = true }
 
 [build-dependencies]
@@ -101,11 +100,12 @@ std = [
   "borsh0-10?/std",
   "bs58/std",
   "bv/std",
-  "core2/std",
   "itertools/use_std",
   "log/std",
+  "nostd/std",
   "num-traits/std",
   "parity-scale-codec?/std",
+  "rand/std",
   "scale-info?/std",
   "serde/std",
   "sha2/std",

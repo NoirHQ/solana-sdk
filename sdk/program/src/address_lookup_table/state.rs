@@ -2,7 +2,7 @@
 use solana_frozen_abi_macro::{AbiEnumVisitor, AbiExample};
 use {
     crate::slot_hashes::get_entries,
-    alloc::{borrow::Cow, vec::Vec},
+    nostd::{borrow::Cow, prelude::*},
     serde_derive::{Deserialize, Serialize},
     solana_program::{
         address_lookup_table::error::AddressLookupError,

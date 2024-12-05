@@ -12,8 +12,8 @@ use {
             MAX_PERMITTED_ACCOUNTS_DATA_ALLOCATIONS_PER_TRANSACTION, MAX_PERMITTED_DATA_LENGTH,
         },
     },
+    core::mem::MaybeUninit,
     solana_program::entrypoint::MAX_PERMITTED_DATA_INCREASE,
-    std::mem::MaybeUninit,
 };
 use {
     crate::{
@@ -21,10 +21,11 @@ use {
         instruction::InstructionError,
         pubkey::Pubkey,
     },
-    std::{
+    nostd::{
         cell::{Ref, RefCell, RefMut},
         collections::HashSet,
         pin::Pin,
+        prelude::*,
         rc::Rc,
     },
 };
@@ -711,7 +712,7 @@ pub struct BorrowedAccount<'a> {
     account: RefMut<'a, AccountSharedData>,
 }
 
-impl<'a> BorrowedAccount<'a> {
+impl BorrowedAccount<'_> {
     /// Returns the transaction context
     pub fn transaction_context(&self) -> &TransactionContext {
         self.transaction_context

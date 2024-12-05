@@ -13,7 +13,7 @@ use {
         account_info::AccountInfo, entrypoint::ProgramResult, instruction::Instruction,
         pubkey::Pubkey, stable_layout::stable_instruction::StableInstruction,
     },
-    alloc::{vec, vec::Vec},
+    nostd::prelude::*,
 };
 
 /// Invoke a cross-program instruction.
@@ -400,13 +400,13 @@ pub fn check_type_assumptions() {
     extern crate memoffset;
     use {
         crate::{clock::Epoch, instruction::AccountMeta},
-        alloc::rc::Rc,
-        core::{
+        memoffset::offset_of,
+        nostd::{
             cell::RefCell,
             mem::{align_of, size_of},
+            rc::Rc,
             str::FromStr,
         },
-        memoffset::offset_of,
     };
 
     // Code in this file assumes that u64 and usize are the same
