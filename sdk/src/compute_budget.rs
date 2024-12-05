@@ -6,6 +6,7 @@
 use {
     crate::instruction::Instruction,
     borsh::{BorshDeserialize, BorshSerialize},
+    nostd::prelude::*,
 };
 
 crate::declare_id!("ComputeBudget111111111111111111111111111111");
