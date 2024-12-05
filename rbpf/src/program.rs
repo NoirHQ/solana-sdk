@@ -1,9 +1,15 @@
 //! Common interface for built-in and user supplied programs
-use crate::{
-    ebpf,
-    elf::ElfError,
-    lib::*,
-    vm::{Config, ContextObject, EbpfVm},
+use {
+    crate::{
+        ebpf,
+        elf::ElfError,
+        vm::{Config, ContextObject, EbpfVm},
+    },
+    nostd::{
+        collections::{btree_map::Entry, BTreeMap},
+        fmt, mem,
+        prelude::*,
+    },
 };
 
 /// Defines a set of sbpf_version of an executable
@@ -346,8 +352,10 @@ macro_rules! declare_builtin_function {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::{syscalls, vm::TestContextObject};
+    use {
+        super::*,
+        crate::{syscalls, vm::TestContextObject},
+    };
 
     #[test]
     fn test_builtin_program_eq() {

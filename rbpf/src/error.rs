@@ -6,7 +6,11 @@
 
 //! This module contains error and result types
 
-use crate::{elf::ElfError, lib::*, memory_region::AccessType, verifier::VerifierError};
+use {
+    crate::{elf::ElfError, memory_region::AccessType, verifier::VerifierError},
+    core::panic,
+    nostd::{error, fmt, prelude::*, ptr},
+};
 
 /// Error definitions
 #[derive(Debug, thiserror::Error)]

@@ -3,8 +3,12 @@
 pub mod consts;
 pub mod types;
 
-use crate::{lib::*, ArithmeticOverflow, ErrCheckedArithmetic};
-use {consts::*, types::*};
+use {
+    crate::{ArithmeticOverflow, ErrCheckedArithmetic},
+    consts::*,
+    nostd::{fmt, mem, ops::Range, prelude::*, slice, str},
+    types::*,
+};
 
 /// Maximum length of section name allowed.
 pub const SECTION_NAME_LENGTH_MAXIMUM: usize = 16;
@@ -563,9 +567,7 @@ impl fmt::Debug for Elf64<'_> {
                     section_header.sh_name,
                     SECTION_NAME_LENGTH_MAXIMUM,
                 )
-                .and_then(|name| {
-                    str::from_utf8(name).map_err(|_| ElfParserError::InvalidString)
-                })
+                .and_then(|name| str::from_utf8(name).map_err(|_| ElfParserError::InvalidString))
                 .unwrap();
             writeln!(f, "{section_name}")?;
             writeln!(f, "{section_header:#X?}")?;
