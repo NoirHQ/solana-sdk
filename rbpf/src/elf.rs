@@ -6,37 +6,33 @@
 // where the section headers may be removed from the ELF.  If that happens then
 // this loader will need to be re-written to use the program headers instead.
 
-use crate::{
-    aligned_memory::{is_memory_aligned, AlignedMemory},
-    ebpf::{self, EF_SBPF_V2, HOST_ALIGN, INSN_SIZE},
-    elf_parser::{
-        consts::{
-            ELFCLASS64, ELFDATA2LSB, ELFOSABI_NONE, EM_BPF, EM_SBPF, ET_DYN, R_X86_64_32,
-            R_X86_64_64, R_X86_64_NONE, R_X86_64_RELATIVE,
-        },
-        types::{Elf64Phdr, Elf64Shdr, Elf64Word},
-        Elf64, ElfParserError,
-    },
-    error::EbpfError,
-    lib::*,
-    memory_region::MemoryRegion,
-    program::{BuiltinProgram, FunctionRegistry, SBPFVersion},
-    verifier::Verifier,
-    vm::{Config, ContextObject},
-};
-
 #[cfg(all(feature = "jit", not(target_os = "windows"), target_arch = "x86_64"))]
 use crate::jit::{JitCompiler, JitProgram};
-use byteorder::{ByteOrder, LittleEndian};
-
-#[cfg(all(feature = "std", not(feature = "shuttle-test")))]
-use std::sync::Arc;
-
-#[cfg(not(feature = "std"))]
-use alloc::sync::Arc;
-
+#[cfg(not(feature = "shuttle-test"))]
+use nostd::sync::Arc;
 #[cfg(feature = "shuttle-test")]
 use shuttle::sync::Arc;
+use {
+    crate::{
+        aligned_memory::{is_memory_aligned, AlignedMemory},
+        ebpf::{self, EF_SBPF_V2, HOST_ALIGN, INSN_SIZE},
+        elf_parser::{
+            consts::{
+                ELFCLASS64, ELFDATA2LSB, ELFOSABI_NONE, EM_BPF, EM_SBPF, ET_DYN, R_X86_64_32,
+                R_X86_64_64, R_X86_64_NONE, R_X86_64_RELATIVE,
+            },
+            types::{Elf64Phdr, Elf64Shdr, Elf64Word},
+            Elf64, ElfParserError,
+        },
+        error::EbpfError,
+        memory_region::MemoryRegion,
+        program::{BuiltinProgram, FunctionRegistry, SBPFVersion},
+        verifier::Verifier,
+        vm::{Config, ContextObject},
+    },
+    byteorder::{ByteOrder, LittleEndian},
+    nostd::{collections::BTreeMap, mem, ops::Range, prelude::*, str},
+};
 
 /// Error definitions
 #[derive(Debug, thiserror::Error, PartialEq, Eq)]
@@ -1194,7 +1190,6 @@ pub(crate) fn get_ro_region(ro_section: &Section, elf: &[u8]) -> MemoryRegion {
 
 #[cfg(test)]
 mod test {
-    use super::*;
     use crate::{
         elf_parser::{
             // FIXME consts::{ELFCLASS32, ELFDATA2MSB, ET_REL},
@@ -1208,9 +1203,12 @@ mod test {
         syscalls,
         vm::TestContextObject,
     };
-    use rand::{distributions::Uniform, Rng};
-    use std::{fs::File, io::Read};
-    use test_utils::assert_error;
+    use {
+        super::*,
+        rand::{distributions::Uniform, Rng},
+        std::{fs::File, io::Read},
+        test_utils::assert_error,
+    };
     type ElfExecutable = Executable<TestContextObject>;
 
     fn loader() -> Arc<BuiltinProgram<TestContextObject>> {

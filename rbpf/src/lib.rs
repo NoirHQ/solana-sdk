@@ -60,45 +60,6 @@ pub mod vm;
 #[cfg(all(feature = "jit", not(target_os = "windows"), target_arch = "x86_64"))]
 mod x86;
 
-mod lib {
-    #[cfg(feature = "std")]
-    pub use std::{
-        array,
-        cell::{Cell, UnsafeCell},
-        cmp,
-        collections::{btree_map::Entry, BTreeMap, BTreeSet, HashMap, HashSet},
-        error, fmt,
-        fmt::Debug,
-        io, mem,
-        ops::{self, Range},
-        ptr::{self, copy_nonoverlapping},
-        slice, str,
-    };
-    #[cfg(not(feature = "std"))]
-    pub use {
-        alloc::{
-            boxed::Box,
-            collections::{btree_map::Entry, BTreeMap, BTreeSet},
-            format, slice,
-            string::{String, ToString},
-            vec,
-            vec::Vec,
-        },
-        core::{
-            array,
-            cell::{Cell, UnsafeCell},
-            cmp, error, fmt,
-            fmt::Debug,
-            mem,
-            ops::{self, Range},
-            ptr::{self, copy_nonoverlapping},
-            str,
-        },
-        nostd::io,
-        hashbrown::{HashMap, HashSet},
-    };
-}
-
 trait ErrCheckedArithmetic: Sized {
     fn err_checked_add(self, other: Self) -> Result<Self, ArithmeticOverflow>;
     fn err_checked_sub(self, other: Self) -> Result<Self, ArithmeticOverflow>;

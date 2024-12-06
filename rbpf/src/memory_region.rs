@@ -1,12 +1,21 @@
 //! This module defines memory regions
 
-use crate::{
-    aligned_memory::Pod,
-    ebpf,
-    error::{EbpfError, ProgramResult},
-    lib::*,
-    program::SBPFVersion,
-    vm::Config,
+use {
+    crate::{
+        aligned_memory::Pod,
+        ebpf,
+        error::{EbpfError, ProgramResult},
+        program::SBPFVersion,
+        vm::Config,
+    },
+    nostd::{
+        array,
+        cell::{Cell, UnsafeCell},
+        cmp, fmt, mem,
+        ops::Range,
+        prelude::*,
+        ptr::{self, copy_nonoverlapping},
+    },
 };
 
 /* Explaination of the Gapped Memory
@@ -954,10 +963,11 @@ impl MappingCache {
 
 #[cfg(test)]
 mod test {
-    use std::{cell::RefCell, rc::Rc};
-    use test_utils::assert_error;
-
-    use super::*;
+    use {
+        super::*,
+        std::{cell::RefCell, rc::Rc},
+        test_utils::assert_error,
+    };
 
     #[test]
     fn test_mapping_cache() {

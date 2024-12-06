@@ -12,31 +12,28 @@
 
 //! Virtual machine for eBPF programs.
 
-use crate::{
-    ebpf,
-    elf::Executable,
-    error::{EbpfError, ProgramResult},
-    interpreter::Interpreter,
-    lib::*,
-    memory_region::MemoryMapping,
-    program::{BuiltinFunction, BuiltinProgram, FunctionRegistry, SBPFVersion},
-    static_analysis::{Analysis, TraceLogEntry},
-};
-
-#[cfg(all(feature = "std", not(feature = "shuttle-test")))]
-use {
-    rand::{thread_rng, Rng},
-    std::sync::Arc,
-};
-
-#[cfg(all(feature = "std", feature = "shuttle-test"))]
+#[cfg(feature = "shuttle-test")]
 use shuttle::{
     rand::{thread_rng, Rng},
     sync::Arc,
 };
-
-#[cfg(not(feature = "std"))]
-use alloc::sync::Arc;
+use {
+    crate::{
+        ebpf,
+        elf::Executable,
+        error::{EbpfError, ProgramResult},
+        interpreter::Interpreter,
+        memory_region::MemoryMapping,
+        program::{BuiltinFunction, BuiltinProgram, FunctionRegistry, SBPFVersion},
+        static_analysis::{Analysis, TraceLogEntry},
+    },
+    nostd::{collections::BTreeMap, mem, prelude::*, ptr},
+};
+#[cfg(not(feature = "shuttle-test"))]
+use {
+    nostd::sync::Arc,
+    rand::{thread_rng, Rng},
+};
 
 /// Shift the RUNTIME_ENVIRONMENT_KEY by this many bits to the LSB
 ///

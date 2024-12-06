@@ -1,6 +1,6 @@
 //! Aligned memory
 
-use crate::lib::*;
+use nostd::{io, mem, prelude::*, ptr};
 
 /// Scalar types, aka "plain old data"
 pub trait Pod {}

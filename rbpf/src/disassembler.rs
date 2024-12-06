@@ -8,12 +8,14 @@
 //! Functions in this module are used to handle eBPF programs with a higher level representation,
 //! for example to disassemble the code into a human-readable format.
 
-use crate::{
-    ebpf,
-    lib::*,
-    program::{BuiltinProgram, FunctionRegistry, SBPFVersion},
-    static_analysis::CfgNode,
-    vm::ContextObject,
+use {
+    crate::{
+        ebpf,
+        program::{BuiltinProgram, FunctionRegistry, SBPFVersion},
+        static_analysis::CfgNode,
+        vm::ContextObject,
+    },
+    nostd::{collections::BTreeMap, prelude::*},
 };
 
 fn resolve_label(cfg_nodes: &BTreeMap<usize, CfgNode>, pc: usize) -> &str {
