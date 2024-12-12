@@ -1,6 +1,6 @@
 [package]
 name = "solana_rbpf"
-version = "0.8.5"
+version = "0.8.4"
 description = "Virtual machine and JIT compiler for eBPF programs"
 authors = ["Solana Maintainers <maintainers@solana.foundation>"]
 repository = "https://github.com/solana-labs/rbpf"
@@ -23,6 +23,7 @@ arbitrary = { version = "1.0", optional = true, features = ["derive"] }
 byteorder = { version = "1.2", default-features = false }
 combine = "3.8.1"
 gdbstub = { version = "0.6.2", optional = true }
+goblin = { version = "0.5.1", default-features = false, features = ["alloc", "elf32", "elf64", "endian_fd"] }
 hash32 = "0.2.0"
 hashbrown = { version = "0.15.2", features = ["alloc"] }
 log = { version = "0.4.2", default-features = false }
@@ -44,6 +45,7 @@ default = ["std"]
 std = [
     "jit",
     "byteorder/std",
+    "goblin/std",
     "log/std",
     "nostd/std",
     "rustc-demangle/std",
@@ -52,7 +54,6 @@ std = [
 jit = ["libc", "winapi"]
 fuzzer-not-safe-for-production = ["arbitrary"]
 debugger = ["gdbstub"]
-shuttle-test = ["dep:shuttle"]
 
 [dev-dependencies]
 elf = "0.0.10"

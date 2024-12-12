@@ -40,6 +40,7 @@ pub mod disassembler;
 pub mod ebpf;
 pub mod elf;
 pub mod elf_parser;
+pub mod elf_parser_glue;
 pub mod error;
 #[cfg(feature = "std")]
 pub mod fuzz;

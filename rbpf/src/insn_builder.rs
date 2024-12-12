@@ -7,7 +7,7 @@
 
 //! Module provides API to create eBPF programs by Rust programming language
 
-use crate::ebpf::*;
+use {crate::ebpf::*, nostd::prelude::*};
 
 /// Represents single eBPF instruction
 pub trait Instruction: Sized {
