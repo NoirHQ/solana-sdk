@@ -203,8 +203,9 @@ impl<T: Copy + PartialEq> FunctionRegistry<T> {
             0,
             |state: usize, (_, (name, value))| {
                 state.saturating_add(
-                    mem::size_of_val(value)
-                        .saturating_add(mem::size_of_val(name).saturating_add(name.capacity())),
+                    mem::size_of_val(value).saturating_add(
+                        mem::size_of_val(name).saturating_add(name.capacity()),
+                    ),
                 )
             },
         ))

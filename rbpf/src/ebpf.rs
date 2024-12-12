@@ -20,7 +20,6 @@
 
 use {
     byteorder::{ByteOrder, LittleEndian},
-    core::panic,
     hash32::{Hash, Hasher, Murmur3Hasher},
     nostd::{fmt, prelude::*},
 };
