@@ -2,9 +2,15 @@
 
 #![allow(clippy::arithmetic_side_effects)]
 use {crate::clock::DEFAULT_MS_PER_SLOT, log::*};
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode, MaxEncodedLen},
+    scale_info::TypeInfo,
+};
 
 #[repr(C)]
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, MaxEncodedLen, TypeInfo))]
 #[derive(Serialize, Deserialize, Default, PartialEq, Eq, Clone, Copy, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct FeeCalculator {
