@@ -1,7 +1,5 @@
 #![cfg(feature = "full")]
 
-#[cfg(feature = "std")]
-use std::path::Path;
 #[cfg(feature = "wasm-bindgen")]
 use wasm_bindgen::prelude::*;
 use {
@@ -19,8 +17,10 @@ use {
         io::{Read, Write},
         prelude::*,
     },
-    rand0_7::{rngs::OsRng, CryptoRng, RngCore},
+    rand0_7::{CryptoRng, RngCore},
 };
+#[cfg(feature = "std")]
+use {rand0_7::rngs::OsRng, std::path::Path};
 
 /// A vanilla Ed25519 key pair
 #[cfg_attr(feature = "wasm-bindgen", wasm_bindgen)]
@@ -62,6 +62,7 @@ impl Keypair {
     }
 
     /// Constructs a new, random `Keypair` using `OsRng`
+    #[cfg(feature = "std")]
     pub fn new() -> Self {
         let mut rng = OsRng;
         Self::generate(&mut rng)
