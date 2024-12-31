@@ -30,6 +30,7 @@ bitflags = { version = "2.5.0", default-features = false }
 blake3 = { version = "1.5.1", default-features = false }
 borsh = { version = "1.5.1", default-features = false, features = ["derive", "unstable__schema"] }
 bs58 = { version = "0.5.1", default-features = false, features = ["alloc"] }
+bv = { package = "nostd-bv", version = "0.11", default-features = false }
 bytemuck = "1.16.1"
 bytemuck_derive = "1.7.0"
 byteorder = { version = "1.5.0", default-features = false }
@@ -87,8 +88,6 @@ wasm-bindgen = { version = "0.2", default-features = false }
 
 # Bumped dependencies to support no_std
 bincode = { package = "solana-bincode", path = "bincode", default-features = false }
-bv = { git = "https://github.com/conr2d/bv-rs", branch = "no_std", features = ["serde"] }
-hashbrown = "0.15"
 nostd = { version = "0.1", features = ["hashbrown", "io"] }
 thiserror = { version = "2.0", default-features = false }
 

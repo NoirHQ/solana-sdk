@@ -25,7 +25,6 @@ combine = "3.8.1"
 gdbstub = { version = "0.6.2", optional = true }
 goblin = { version = "0.5.1", default-features = false, features = ["alloc", "elf32", "elf64", "endian_fd"] }
 hash32 = "0.2.0"
-hashbrown = { version = "0.15.2", features = ["alloc"] }
 log = { version = "0.4.2", default-features = false }
 nostd = { workspace = true }
 rand = { version = "0.8.5", features = ["small_rng"] }
