@@ -15,8 +15,6 @@ use {
         pubkey::Pubkey,
         rent::Rent,
         shred_version::compute_shred_version,
-        signature::{Keypair, Signer},
-        system_program,
         timing::years_as_slots,
     },
     bincode::serialize,
@@ -25,6 +23,10 @@ use {
 };
 #[cfg(feature = "std")]
 use {
+    crate::{
+        signature::{Keypair, Signer},
+        system_program,
+    },
     bincode::deserialize,
     memmap2::Mmap,
     std::{
@@ -121,6 +123,7 @@ pub struct GenesisConfig {
 }
 
 // useful for basic tests
+#[cfg(feature = "std")]
 pub fn create_genesis_config(lamports: u64) -> (GenesisConfig, Keypair) {
     let faucet_keypair = Keypair::new();
     (
