@@ -79,6 +79,12 @@ scale = [
   "scale-info",
   "solana-program/scale",
 ]
+wasm-bindgen = [
+  "dep:wasm-bindgen",
+  "getrandom",
+  "js-sys",
+  "solana-program/wasm-bindgen",
+]
 
 [dependencies]
 bincode = { workspace = true }
@@ -126,9 +132,9 @@ thiserror = { workspace = true }
 uriparse = { workspace = true }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-getrandom = { version = "0.1", features = ["wasm-bindgen"] }
-js-sys = { workspace = true }
-wasm-bindgen = { workspace = true }
+getrandom = { version = "0.1", features = ["wasm-bindgen"], optional = true }
+js-sys = { workspace = true, optional = true }
+wasm-bindgen = { workspace = true, optional = true }
 
 [dev-dependencies]
 anyhow = { workspace = true }

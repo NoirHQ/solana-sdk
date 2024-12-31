@@ -1,5 +1,5 @@
 //! solana-program Javascript interface
-#![cfg(target_arch = "wasm32")]
+#![cfg(feature = "wasm-bindgen")]
 use wasm_bindgen::prelude::*;
 
 pub mod hash;
