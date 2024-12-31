@@ -1,5 +1,5 @@
 //! `Pubkey` Javascript interface
-#![cfg(target_arch = "wasm32")]
+#![cfg(feature = "wasm-bindgen")]
 #![allow(non_snake_case)]
 use {
     crate::{pubkey::*, wasm::display_to_jsvalue},

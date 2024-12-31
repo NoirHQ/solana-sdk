@@ -11,7 +11,7 @@
 
 #![allow(clippy::arithmetic_side_effects)]
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm-bindgen")]
 use crate::wasm_bindgen;
 #[allow(deprecated)]
 pub use builtins::{BUILTIN_PROGRAMS_KEYS, MAYBE_BUILTIN_KEY_OR_SYSVAR};
@@ -123,7 +123,7 @@ fn compile_instructions(ixs: &[Instruction], keys: &[Pubkey]) -> Vec<CompiledIns
 /// redundantly specifying the fee-payer is not strictly required.
 // NOTE: Serialization-related changes must be paired with the custom serialization
 // for versioned messages in the `RemainingLegacyMessage` struct.
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(not(feature = "wasm-bindgen"))]
 #[cfg_attr(
     feature = "frozen-abi",
     frozen_abi(digest = "2KnLEqfLcTBQqitE22Pp8JYkaqVVbAkGbCfdeHoyxcAU"),
@@ -153,13 +153,14 @@ pub struct Message {
 /// wasm-bindgen version of the Message struct.
 /// This duplication is required until https://github.com/rustwasm/wasm-bindgen/issues/3671
 /// is fixed. This must not diverge from the regular non-wasm Message struct.
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm-bindgen")]
 #[wasm_bindgen]
 #[cfg_attr(
     feature = "frozen-abi",
     frozen_abi(digest = "2KnLEqfLcTBQqitE22Pp8JYkaqVVbAkGbCfdeHoyxcAU"),
     derive(AbiExample)
 )]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Serialize, Deserialize, Default, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Message {

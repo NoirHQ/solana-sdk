@@ -538,10 +538,10 @@ pub mod system_instruction;
 pub mod system_program;
 pub mod sysvar;
 pub mod vote;
-#[cfg(feature = "std")]
+#[cfg(feature = "wasm-bindgen")]
 pub mod wasm;
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm-bindgen")]
 pub use wasm_bindgen::prelude::wasm_bindgen;
 
 /// The [config native program][np].

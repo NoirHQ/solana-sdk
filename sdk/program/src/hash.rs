@@ -3,7 +3,7 @@
 //! [SHA-256]: https://en.wikipedia.org/wiki/SHA-2
 //! [`Hash`]: struct@Hash
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm-bindgen")]
 use crate::wasm_bindgen;
 use {
     crate::sanitize::Sanitize,
@@ -38,7 +38,7 @@ const MAX_BASE58_LEN: usize = 44;
 /// [blake3]: https://github.com/BLAKE3-team/BLAKE3
 /// [`blake3`]: crate::blake3
 /// [`Message::hash`]: crate::message::Message::hash
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+#[cfg_attr(feature = "wasm-bindgen", wasm_bindgen)]
 #[cfg_attr(feature = "frozen-abi", derive(AbiExample))]
 #[cfg_attr(
     feature = "borsh",

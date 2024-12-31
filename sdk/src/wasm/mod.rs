@@ -1,5 +1,5 @@
 //! solana-sdk Javascript interface
-#![cfg(target_arch = "wasm32")]
+#![cfg(feature = "wasm-bindgen")]
 
 pub mod keypair;
 pub mod transaction;

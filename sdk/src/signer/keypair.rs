@@ -2,7 +2,7 @@
 
 #[cfg(feature = "std")]
 use std::path::Path;
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm-bindgen")]
 use wasm_bindgen::prelude::*;
 use {
     crate::{
@@ -23,7 +23,7 @@ use {
 };
 
 /// A vanilla Ed25519 key pair
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+#[cfg_attr(feature = "wasm-bindgen", wasm_bindgen)]
 #[derive(Debug)]
 pub struct Keypair(ed25519_dalek::Keypair);
 

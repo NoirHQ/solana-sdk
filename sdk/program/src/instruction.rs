@@ -13,7 +13,7 @@
 
 #![allow(clippy::arithmetic_side_effects)]
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm-bindgen")]
 use crate::wasm_bindgen;
 #[cfg(feature = "borsh")]
 use borsh::BorshSerialize;
@@ -333,7 +333,7 @@ pub enum InstructionError {
 /// Programs may require signatures from some accounts, in which case they
 /// should be specified as signers during `Instruction` construction. The
 /// program must still validate during execution that the account is a signer.
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(not(feature = "wasm-bindgen"))]
 #[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 pub struct Instruction {
     /// Pubkey of the program that executes this instruction.
@@ -347,7 +347,7 @@ pub struct Instruction {
 /// wasm-bindgen version of the Instruction struct.
 /// This duplication is required until https://github.com/rustwasm/wasm-bindgen/issues/3671
 /// is fixed. This must not diverge from the regular non-wasm Instruction struct.
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm-bindgen")]
 #[wasm_bindgen]
 pub struct Instruction {
     #[wasm_bindgen(skip)]
