@@ -538,6 +538,7 @@ pub mod system_instruction;
 pub mod system_program;
 pub mod sysvar;
 pub mod vote;
+#[cfg(feature = "std")]
 pub mod wasm;
 
 #[cfg(target_arch = "wasm32")]
