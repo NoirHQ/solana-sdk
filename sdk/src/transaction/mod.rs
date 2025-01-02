@@ -109,7 +109,7 @@
 //! # Ok::<(), anyhow::Error>(())
 //! ```
 
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
 #[cfg(feature = "wasm-bindgen")]
 use crate::wasm_bindgen;

@@ -418,14 +418,40 @@ pub fn secp256k1_recover(
 
     #[cfg(not(target_os = "solana"))]
     {
-        let message = libsecp256k1::Message::parse_slice(hash)
-            .map_err(|_| Secp256k1RecoverError::InvalidHash)?;
-        let recovery_id = libsecp256k1::RecoveryId::parse(recovery_id)
-            .map_err(|_| Secp256k1RecoverError::InvalidRecoveryId)?;
-        let signature = libsecp256k1::Signature::parse_standard_slice(signature)
-            .map_err(|_| Secp256k1RecoverError::InvalidSignature)?;
-        let secp256k1_key = libsecp256k1::recover(&message, &signature, &recovery_id)
-            .map_err(|_| Secp256k1RecoverError::InvalidSignature)?;
-        Ok(Secp256k1Pubkey::new(&secp256k1_key.serialize()[1..65]))
+        #[cfg(feature = "impls")]
+        {
+            let message = libsecp256k1::Message::parse_slice(hash)
+                .map_err(|_| Secp256k1RecoverError::InvalidHash)?;
+            let recovery_id = libsecp256k1::RecoveryId::parse(recovery_id)
+                .map_err(|_| Secp256k1RecoverError::InvalidRecoveryId)?;
+            let signature = libsecp256k1::Signature::parse_standard_slice(signature)
+                .map_err(|_| Secp256k1RecoverError::InvalidSignature)?;
+            let secp256k1_key = libsecp256k1::recover(&message, &signature, &recovery_id)
+                .map_err(|_| Secp256k1RecoverError::InvalidSignature)?;
+            Ok(Secp256k1Pubkey::new(&secp256k1_key.serialize()[1..65]))
+        }
+
+        #[cfg(not(feature = "impls"))]
+        {
+            use sp_io::EcdsaVerifyError;
+
+            let sig = {
+                if signature.len() != 64 {
+                    return Err(Secp256k1RecoverError::InvalidSignature);
+                }
+                let mut sig = [0u8; 65];
+                sig[0..SECP256K1_SIGNATURE_LENGTH].copy_from_slice(signature);
+                sig[SECP256K1_SIGNATURE_LENGTH] = recovery_id;
+                sig
+            };
+            let msg = <[u8; 32]>::try_from(hash).map_err(|_| Secp256k1RecoverError::InvalidHash)?;
+
+            sp_io::crypto::secp256k1_ecdsa_recover(&sig, &msg)
+                .map_err(|e| match e {
+                    EcdsaVerifyError::BadV => Secp256k1RecoverError::InvalidRecoveryId,
+                    _ => Secp256k1RecoverError::InvalidSignature,
+                })
+                .map(Secp256k1Pubkey)
+        }
     }
 }

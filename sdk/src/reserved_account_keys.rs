@@ -2,7 +2,7 @@
 //! New reserved account keys may be added as long as they specify a feature
 //! gate that transitions the key into read-only at an epoch boundary.
 
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
 use {
     crate::{

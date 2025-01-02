@@ -1,6 +1,6 @@
 //! Defines a transaction which supports multiple versions of messages.
 
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
 use {
     crate::{

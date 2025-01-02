@@ -38,6 +38,7 @@ sha3 = { workspace = true }
 solana-frozen-abi = { workspace = true, optional = true }
 solana-frozen-abi-macro = { workspace = true, optional = true }
 solana-sdk-macro = { workspace = true }
+sp-io = { workspace = true }
 spin = { workspace = true }
 thiserror = { workspace = true }
 
@@ -92,7 +93,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = ["std", "borsh"]
+default = ["std", "borsh", "impls"]
 std = [
   "bincode/std",
   "blake3/std",
@@ -111,11 +112,13 @@ std = [
   "serde/std",
   "sha2/std",
   "sha3/std",
+  "sp-io/std",
   "thiserror/std",
 ]
 borsh = ["dep:borsh", "dep:borsh0-10"]
 dev-context-only-utils = ["dep:qualifier_attr"]
 frozen-abi = ["dep:solana-frozen-abi", "dep:solana-frozen-abi-macro"]
+impls = []
 scale = ["parity-scale-codec", "scale-info"]
 wasm-bindgen = [
   "dep:wasm-bindgen",

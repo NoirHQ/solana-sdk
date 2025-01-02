@@ -1,7 +1,8 @@
 //! Functionality for public and private keys.
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
 // legacy module paths
+#[cfg(feature = "full")]
 pub use crate::signer::{keypair::*, null_signer::*, presigner::*, *};
 use {
     crate::pubkey::Pubkey,
@@ -40,11 +41,12 @@ impl Default for Signature {
 }
 
 impl Signature {
-    #[cfg(feature = "std")]
+    #[cfg(all(feature = "std", feature = "full"))]
     pub fn new_unique() -> Self {
         Self::from(core::array::from_fn(|_| rand::random()))
     }
 
+    #[cfg(feature = "impls")]
     pub(self) fn verify_verbose(
         &self,
         pubkey_bytes: &[u8],
@@ -55,12 +57,32 @@ impl Signature {
         publickey.verify_strict(message_bytes, &signature)
     }
 
+    #[cfg(not(feature = "impls"))]
+    pub(self) fn verify_verbose(
+        &self,
+        pubkey_bytes: &[u8],
+        message_bytes: &[u8],
+    ) -> Result<(), &'static str> {
+        use crate::pubkey::PUBKEY_BYTES;
+
+        let pub_key = <[u8; PUBKEY_BYTES]>::try_from(pubkey_bytes)
+            .map_err(|_| "InvalidPubkey")?
+            .into();
+        let sig = self.0.clone().into();
+        if sp_io::crypto::ed25519_verify(&sig, message_bytes, &pub_key) {
+            Ok(())
+        } else {
+            Err("InvalidSignature")
+        }
+    }
+
     pub fn verify(&self, pubkey_bytes: &[u8], message_bytes: &[u8]) -> bool {
         self.verify_verbose(pubkey_bytes, message_bytes).is_ok()
     }
 }
 
 pub trait Signable {
+    #[cfg(feature = "full")]
     fn sign(&mut self, keypair: &Keypair) {
         let signature = keypair.sign_message(self.signable_data().borrow());
         self.set_signature(signature);
