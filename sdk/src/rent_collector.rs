@@ -1,4 +1,4 @@
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
 //! calculate and collect rent from Accounts
 use solana_sdk::{
