@@ -38,7 +38,7 @@ extern crate alloc;
 // Allows macro expansion of `use ::solana_sdk::*` to work within this crate
 extern crate self as solana_sdk;
 
-#[cfg(feature = "full")]
+#[cfg(feature = "core")]
 pub use signer::signers;
 #[cfg(not(target_os = "solana"))]
 pub use solana_program::program_stubs;

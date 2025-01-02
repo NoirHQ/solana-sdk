@@ -435,6 +435,9 @@ pub fn secp256k1_recover(
         {
             use sp_io::EcdsaVerifyError;
 
+            if recovery_id > 3 {
+                return Err(Secp256k1RecoverError::InvalidRecoveryId);
+            }
             let sig = {
                 if signature.len() != 64 {
                     return Err(Secp256k1RecoverError::InvalidSignature);

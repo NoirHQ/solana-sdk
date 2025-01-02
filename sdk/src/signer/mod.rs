@@ -1,6 +1,6 @@
 //! Abstractions and implementations for transaction signers.
 
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
 #[cfg(feature = "std")]
 use std::{
@@ -24,10 +24,18 @@ use {
     thiserror::Error,
 };
 
+#[cfg(feature = "full")]
 pub mod keypair;
 pub mod null_signer;
 pub mod presigner;
 pub mod signers;
+
+#[cfg(not(feature = "full"))]
+mod keypair_alt;
+#[cfg(not(feature = "full"))]
+pub mod keypair {
+    pub use super::keypair_alt::*;
+}
 
 #[derive(Debug, Error, PartialEq, Eq)]
 pub enum SignerError {

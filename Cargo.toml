@@ -79,6 +79,7 @@ solana-frozen-abi-macro = "=2.0.18"
 solana-logger = "=2.0.18"
 solana-program = { path = "sdk/program", default-features = false }
 solana-sdk-macro = { path = "sdk/macro" }
+sp-core = { version = "34.0.0", default-features = false }
 sp-io = { version = "38.0.0", default-features = false }
 spin = "0.9.8"
 static_assertions = "1.1.0"

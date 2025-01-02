@@ -19,16 +19,16 @@ pub mod solana_rpc_client {
             super::super::{
                 solana_rpc_client_api::client_error::Result as ClientResult,
                 solana_sdk::{
-                    account::Account, hash::Hash, pubkey::Pubkey, signature::Signature,
-                    transaction::Transaction,
+                    account::Account, collections::AdaptiveMap, hash::Hash, pubkey::Pubkey,
+                    signature::Signature, transaction::Transaction,
                 },
             },
-            nostd::{cell::RefCell, collections::HashMap, prelude::*, rc::Rc},
+            nostd::{cell::RefCell, prelude::*, rc::Rc},
         };
 
         #[derive(Default)]
         pub struct RpcClient {
-            get_account_responses: Rc<RefCell<HashMap<Pubkey, Account>>>,
+            get_account_responses: Rc<RefCell<AdaptiveMap<Pubkey, Account>>>,
         }
 
         impl RpcClient {
@@ -113,7 +113,7 @@ pub mod solana_rpc_client_nonce_utils {
 /// programs.
 pub mod solana_sdk {
     pub use crate::{
-        hash, instruction, keccak, message, nonce,
+        collections, hash, instruction, keccak, message, nonce,
         pubkey::{self, Pubkey},
         system_instruction, system_program,
         sysvar::{

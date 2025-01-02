@@ -113,6 +113,8 @@
 
 #[cfg(feature = "wasm-bindgen")]
 use crate::wasm_bindgen;
+#[cfg(feature = "full")]
+use crate::{signature::SignerError, signers::Signers};
 use {
     crate::{
         hash::Hash,
@@ -124,8 +126,7 @@ use {
         pubkey::Pubkey,
         sanitize::{Sanitize, SanitizeError},
         short_vec,
-        signature::{Signature, SignerError},
-        signers::Signers,
+        signature::Signature,
     },
     nostd::{prelude::*, result},
     serde::Serialize,
@@ -369,6 +370,7 @@ impl Transaction {
     /// #
     /// # Ok::<(), anyhow::Error>(())
     /// ```
+    #[cfg(feature = "full")]
     pub fn new<T: Signers + ?Sized>(
         from_keypairs: &T,
         message: Message,
@@ -524,6 +526,7 @@ impl Transaction {
     /// #
     /// # Ok::<(), anyhow::Error>(())
     /// ```
+    #[cfg(feature = "full")]
     pub fn new_signed_with_payer<T: Signers + ?Sized>(
         instructions: &[Instruction],
         payer: Option<&Pubkey>,
@@ -549,6 +552,7 @@ impl Transaction {
     ///
     /// Panics when signing fails. See [`Transaction::try_sign`] and for a full
     /// description of failure conditions.
+    #[cfg(feature = "full")]
     pub fn new_with_compiled_instructions<T: Signers + ?Sized>(
         from_keypairs: &T,
         keys: &[Pubkey],
@@ -728,6 +732,7 @@ impl Transaction {
     /// #
     /// # Ok::<(), anyhow::Error>(())
     /// ```
+    #[cfg(feature = "full")]
     pub fn sign<T: Signers + ?Sized>(&mut self, keypairs: &T, recent_blockhash: Hash) {
         if let Err(e) = self.try_sign(keypairs, recent_blockhash) {
             panic!("Transaction::sign failed with error {e:?}");
@@ -754,6 +759,7 @@ impl Transaction {
     /// handle the error. See the documentation for
     /// [`Transaction::try_partial_sign`] for a full description of failure
     /// conditions.
+    #[cfg(feature = "full")]
     pub fn partial_sign<T: Signers + ?Sized>(&mut self, keypairs: &T, recent_blockhash: Hash) {
         if let Err(e) = self.try_partial_sign(keypairs, recent_blockhash) {
             panic!("Transaction::partial_sign failed with error {e:?}");
@@ -773,6 +779,7 @@ impl Transaction {
     ///
     /// Panics if signing fails. Use [`Transaction::try_partial_sign_unchecked`]
     /// to handle the error.
+    #[cfg(feature = "full")]
     pub fn partial_sign_unchecked<T: Signers + ?Sized>(
         &mut self,
         keypairs: &T,
@@ -866,6 +873,7 @@ impl Transaction {
     /// #
     /// # Ok::<(), anyhow::Error>(())
     /// ```
+    #[cfg(feature = "full")]
     pub fn try_sign<T: Signers + ?Sized>(
         &mut self,
         keypairs: &T,
@@ -929,6 +937,7 @@ impl Transaction {
     /// [`PresignerError::VerificationFailure`]: crate::signer::presigner::PresignerError::VerificationFailure
     /// [`solana-remote-wallet`]: https://docs.rs/solana-remote-wallet/latest/
     /// [`RemoteKeypair`]: https://docs.rs/solana-remote-wallet/latest/solana_remote_wallet/remote_keypair/struct.RemoteKeypair.html
+    #[cfg(feature = "full")]
     pub fn try_partial_sign<T: Signers + ?Sized>(
         &mut self,
         keypairs: &T,
@@ -955,6 +964,7 @@ impl Transaction {
     /// # Errors
     ///
     /// Returns an error if signing fails.
+    #[cfg(feature = "full")]
     pub fn try_partial_sign_unchecked<T: Signers + ?Sized>(
         &mut self,
         keypairs: &T,

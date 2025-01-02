@@ -1,7 +1,9 @@
 //! Solana precompiled programs.
 
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
+#[cfg(feature = "full")]
+use crate::{ed25519_instruction, secp256k1_instruction};
 use {
     crate::{
         decode_error::DecodeError, feature_set::FeatureSet, instruction::CompiledInstruction,
@@ -11,6 +13,10 @@ use {
     nostd::prelude::*,
     thiserror::Error,
 };
+#[cfg(not(feature = "full"))]
+mod ed25519_instruction;
+#[cfg(not(feature = "full"))]
+mod secp256k1_instruction;
 
 /// Precompile errors
 #[derive(Error, Debug, Clone, PartialEq, Eq)]
@@ -79,12 +85,12 @@ lazy_static! {
         Precompile::new(
             crate::secp256k1_program::id(),
             None, // always enabled
-            crate::secp256k1_instruction::verify,
+            secp256k1_instruction::verify,
         ),
         Precompile::new(
             crate::ed25519_program::id(),
             None, // always enabled
-            crate::ed25519_instruction::verify,
+            ed25519_instruction::verify,
         ),
     ];
 }

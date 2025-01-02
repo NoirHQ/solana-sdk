@@ -2,7 +2,6 @@
 #![cfg(feature = "core")]
 
 // legacy module paths
-#[cfg(feature = "full")]
 pub use crate::signer::{keypair::*, null_signer::*, presigner::*, *};
 use {
     crate::pubkey::Pubkey,

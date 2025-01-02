@@ -27,26 +27,6 @@ use {rand0_7::rngs::OsRng, std::path::Path};
 #[derive(Debug)]
 pub struct Keypair(ed25519_dalek::Keypair);
 
-#[cfg(not(feature = "std"))]
-#[derive(Debug, thiserror::Error)]
-#[error("{0}")]
-pub struct SignatureError(String);
-
-#[cfg(not(feature = "std"))]
-impl SignatureError {
-    pub fn from_source(source: String) -> Self {
-        Self(source)
-    }
-}
-
-#[cfg(not(feature = "std"))]
-impl From<ed25519_dalek::SignatureError> for SignatureError {
-    fn from(e: ed25519_dalek::SignatureError) -> Self {
-        Self(e.to_string())
-    }
-}
-
-#[cfg(feature = "std")]
 pub type SignatureError = ed25519_dalek::SignatureError;
 
 impl Keypair {
