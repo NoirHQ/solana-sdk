@@ -3,8 +3,8 @@
 mod current;
 pub use current::{Data, DurableNonce, State};
 use {
-    crate::{hash::Hash, pubkey::Pubkey},
-    nostd::{collections::HashSet, prelude::*},
+    crate::{collections::AdaptiveSet, hash::Hash, pubkey::Pubkey},
+    nostd::prelude::*,
     serde_derive::{Deserialize, Serialize},
 };
 
@@ -75,7 +75,7 @@ impl Versions {
     /// Updates the authority pubkey on the nonce account.
     pub fn authorize(
         self,
-        signers: &HashSet<Pubkey>,
+        signers: &AdaptiveSet<Pubkey>,
         authority: Pubkey,
     ) -> Result<Self, AuthorizeNonceError> {
         let data = match self.state() {

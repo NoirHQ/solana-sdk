@@ -1,10 +1,11 @@
 use {
     crate::{
         bpf_loader_upgradeable,
+        collections::AdaptiveSet,
         message::{v0, AccountKeys},
         pubkey::Pubkey,
     },
-    nostd::{borrow::Cow, collections::HashSet, prelude::*},
+    nostd::{borrow::Cow, prelude::*},
 };
 
 /// Combination of a version #0 message and its loaded addresses
@@ -58,7 +59,7 @@ impl<'a> LoadedMessage<'a> {
     pub fn new(
         message: v0::Message,
         loaded_addresses: LoadedAddresses,
-        reserved_account_keys: &HashSet<Pubkey>,
+        reserved_account_keys: &AdaptiveSet<Pubkey>,
     ) -> Self {
         let mut loaded_message = Self {
             message: Cow::Owned(message),
@@ -72,7 +73,7 @@ impl<'a> LoadedMessage<'a> {
     pub fn new_borrowed(
         message: &'a v0::Message,
         loaded_addresses: &'a LoadedAddresses,
-        reserved_account_keys: &HashSet<Pubkey>,
+        reserved_account_keys: &AdaptiveSet<Pubkey>,
     ) -> Self {
         let mut loaded_message = Self {
             message: Cow::Borrowed(message),
@@ -83,7 +84,7 @@ impl<'a> LoadedMessage<'a> {
         loaded_message
     }
 
-    fn set_is_writable_account_cache(&mut self, reserved_account_keys: &HashSet<Pubkey>) {
+    fn set_is_writable_account_cache(&mut self, reserved_account_keys: &AdaptiveSet<Pubkey>) {
         let is_writable_account_cache = self
             .account_keys()
             .iter()
@@ -108,7 +109,7 @@ impl<'a> LoadedMessage<'a> {
 
     /// Returns true if any account keys are duplicates
     pub fn has_duplicates(&self) -> bool {
-        let mut uniq = HashSet::new();
+        let mut uniq = AdaptiveSet::new();
         self.account_keys().iter().any(|x| !uniq.insert(x))
     }
 
@@ -138,7 +139,7 @@ impl<'a> LoadedMessage<'a> {
     fn is_writable_internal(
         &self,
         key_index: usize,
-        reserved_account_keys: &HashSet<Pubkey>,
+        reserved_account_keys: &AdaptiveSet<Pubkey>,
     ) -> bool {
         if self.is_writable_index(key_index) {
             if let Some(key) = self.account_keys().get(key_index) {

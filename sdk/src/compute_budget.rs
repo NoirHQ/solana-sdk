@@ -1,6 +1,6 @@
 //! The compute budget native program.
 
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
 #[cfg(feature = "borsh")]
 use {

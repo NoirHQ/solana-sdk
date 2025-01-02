@@ -1,5 +1,6 @@
 use {
     crate::{
+        collections::AdaptiveSet,
         ed25519_program,
         hash::Hash,
         instruction::CompiledInstruction,
@@ -17,7 +18,7 @@ use {
         solana_program::{system_instruction::SystemInstruction, system_program},
         sysvar::instructions::{BorrowedAccountMeta, BorrowedInstruction},
     },
-    nostd::{borrow::Cow, collections::HashSet, prelude::*},
+    nostd::{borrow::Cow, prelude::*},
     thiserror::Error,
 };
 
@@ -31,7 +32,7 @@ pub struct LegacyMessage<'a> {
 }
 
 impl LegacyMessage<'_> {
-    pub fn new(message: legacy::Message, reserved_account_keys: &HashSet<Pubkey>) -> Self {
+    pub fn new(message: legacy::Message, reserved_account_keys: &AdaptiveSet<Pubkey>) -> Self {
         let is_writable_account_cache = message
             .account_keys
             .iter()
@@ -109,7 +110,7 @@ impl SanitizedMessage {
     pub fn try_new(
         sanitized_msg: SanitizedVersionedMessage,
         address_loader: impl AddressLoader,
-        reserved_account_keys: &HashSet<Pubkey>,
+        reserved_account_keys: &AdaptiveSet<Pubkey>,
     ) -> Result<Self, SanitizeMessageError> {
         Ok(match sanitized_msg.message {
             VersionedMessage::Legacy(message) => {
@@ -130,7 +131,7 @@ impl SanitizedMessage {
     /// Create a sanitized legacy message
     pub fn try_from_legacy_message(
         message: legacy::Message,
-        reserved_account_keys: &HashSet<Pubkey>,
+        reserved_account_keys: &AdaptiveSet<Pubkey>,
     ) -> Result<Self, SanitizeMessageError> {
         message.sanitize()?;
         Ok(Self::Legacy(LegacyMessage::new(

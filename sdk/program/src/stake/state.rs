@@ -3,18 +3,16 @@
 // warnings from uses of deprecated types during trait derivations.
 #![allow(deprecated)]
 
-use {
-    crate::{
-        clock::{Clock, Epoch, UnixTimestamp},
-        instruction::InstructionError,
-        pubkey::Pubkey,
-        stake::{
-            instruction::{LockupArgs, StakeError},
-            stake_flags::StakeFlags,
-        },
-        stake_history::{StakeHistory, StakeHistoryEntry},
+use crate::{
+    clock::{Clock, Epoch, UnixTimestamp},
+    collections::AdaptiveSet,
+    instruction::InstructionError,
+    pubkey::Pubkey,
+    stake::{
+        instruction::{LockupArgs, StakeError},
+        stake_flags::StakeFlags,
     },
-    nostd::collections::HashSet,
+    stake_history::{StakeHistory, StakeHistoryEntry},
 };
 #[cfg(feature = "borsh")]
 use {
@@ -368,7 +366,7 @@ impl Authorized {
     }
     pub fn check(
         &self,
-        signers: &HashSet<Pubkey>,
+        signers: &AdaptiveSet<Pubkey>,
         stake_authorize: StakeAuthorize,
     ) -> Result<(), InstructionError> {
         match stake_authorize {
@@ -380,7 +378,7 @@ impl Authorized {
 
     pub fn authorize(
         &mut self,
-        signers: &HashSet<Pubkey>,
+        signers: &AdaptiveSet<Pubkey>,
         new_authorized: &Pubkey,
         stake_authorize: StakeAuthorize,
         lockup_custodian_args: Option<(&Lockup, &Clock, Option<&Pubkey>)>,
@@ -492,7 +490,7 @@ impl Meta {
     pub fn set_lockup(
         &mut self,
         lockup: &LockupArgs,
-        signers: &HashSet<Pubkey>,
+        signers: &AdaptiveSet<Pubkey>,
         clock: &Clock,
     ) -> Result<(), InstructionError> {
         // post-stake_program_v4 behavior:

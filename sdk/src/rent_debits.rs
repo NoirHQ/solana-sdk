@@ -1,5 +1,5 @@
 use {
-    nostd::collections::HashMap,
+    crate::collections::AdaptiveMap,
     solana_sdk::{pubkey::Pubkey, reward_info::RewardInfo, reward_type::RewardType},
 };
 
@@ -24,7 +24,7 @@ impl RentDebit {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct RentDebits(HashMap<Pubkey, RentDebit>);
+pub struct RentDebits(AdaptiveMap<Pubkey, RentDebit>);
 impl RentDebits {
     pub fn get_account_rent_debit(&self, address: &Pubkey) -> u64 {
         self.0

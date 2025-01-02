@@ -18,12 +18,12 @@ use {
 use {
     crate::{
         account::{AccountSharedData, ReadableAccount},
+        collections::AdaptiveSet,
         instruction::InstructionError,
         pubkey::Pubkey,
     },
     nostd::{
         cell::{Ref, RefCell, RefMut},
-        collections::HashSet,
         pin::Pin,
         prelude::*,
         rc::Rc,
@@ -688,8 +688,8 @@ impl InstructionContext {
     pub fn get_signers(
         &self,
         transaction_context: &TransactionContext,
-    ) -> Result<HashSet<Pubkey>, InstructionError> {
-        let mut result = HashSet::new();
+    ) -> Result<AdaptiveSet<Pubkey>, InstructionError> {
+        let mut result = AdaptiveSet::new();
         for instruction_account in self.instruction_accounts.iter() {
             if instruction_account.is_signer {
                 result.insert(

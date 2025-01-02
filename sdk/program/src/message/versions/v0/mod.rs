@@ -14,6 +14,7 @@ use {
     crate::{
         address_lookup_table::AddressLookupTableAccount,
         bpf_loader_upgradeable,
+        collections::AdaptiveSet,
         hash::Hash,
         instruction::{CompiledInstruction, Instruction},
         message::{
@@ -24,7 +25,7 @@ use {
         sanitize::SanitizeError,
         short_vec,
     },
-    nostd::{collections::HashSet, prelude::*},
+    nostd::prelude::*,
 };
 #[cfg(feature = "scale")]
 use {
@@ -353,7 +354,7 @@ impl Message {
     pub fn is_maybe_writable(
         &self,
         key_index: usize,
-        reserved_account_keys: Option<&HashSet<Pubkey>>,
+        reserved_account_keys: Option<&AdaptiveSet<Pubkey>>,
     ) -> bool {
         self.is_writable_index(key_index)
             && !self.is_account_maybe_reserved(key_index, reserved_account_keys)
@@ -370,7 +371,7 @@ impl Message {
     fn is_account_maybe_reserved(
         &self,
         key_index: usize,
-        reserved_account_keys: Option<&HashSet<Pubkey>>,
+        reserved_account_keys: Option<&AdaptiveSet<Pubkey>>,
     ) -> bool {
         let mut is_maybe_reserved = false;
         if let Some(reserved_account_keys) = reserved_account_keys {

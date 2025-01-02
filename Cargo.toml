@@ -89,7 +89,7 @@ wasm-bindgen = { version = "0.2", default-features = false }
 
 # Bumped dependencies to support no_std
 bincode = { package = "solana-bincode", path = "bincode", default-features = false }
-nostd = { version = "0.1", features = ["hashbrown", "io"] }
+nostd = { version = "0.1", features = ["io"] }
 thiserror = { version = "2.0", default-features = false }
 
 # curve25519-dalek uses the simd backend by default in v4 if possible,

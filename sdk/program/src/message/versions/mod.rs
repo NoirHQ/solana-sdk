@@ -1,5 +1,6 @@
 use {
     crate::{
+        collections::AdaptiveSet,
         hash::Hash,
         instruction::CompiledInstruction,
         message::{legacy::Message as LegacyMessage, v0::MessageAddressTableLookup, MessageHeader},
@@ -7,7 +8,7 @@ use {
         sanitize::{Sanitize, SanitizeError},
         short_vec,
     },
-    nostd::{collections::HashSet, fmt, prelude::*},
+    nostd::{fmt, prelude::*},
     serde::{
         de::{self, Deserializer, SeqAccess, Unexpected, Visitor},
         ser::{SerializeTuple, Serializer},
@@ -90,7 +91,7 @@ impl VersionedMessage {
     pub fn is_maybe_writable(
         &self,
         index: usize,
-        reserved_account_keys: Option<&HashSet<Pubkey>>,
+        reserved_account_keys: Option<&AdaptiveSet<Pubkey>>,
     ) -> bool {
         match self {
             Self::Legacy(message) => message.is_maybe_writable(index, reserved_account_keys),

@@ -7,6 +7,7 @@
 use {
     crate::{
         address_lookup_table, bpf_loader, bpf_loader_deprecated, bpf_loader_upgradeable,
+        collections::{AdaptiveMap, AdaptiveSet},
         compute_budget, config, ed25519_program, feature,
         feature_set::{self, FeatureSet},
         loader_v4, native_loader,
@@ -14,10 +15,7 @@ use {
         secp256k1_program, stake, system_program, sysvar, vote,
     },
     lazy_static::lazy_static,
-    nostd::{
-        collections::{HashMap, HashSet},
-        prelude::*,
-    },
+    nostd::prelude::*,
 };
 
 // Inline zk token program id since it isn't available in the sdk
@@ -46,10 +44,10 @@ impl ::solana_frozen_abi::abi_example::AbiExample for ReservedAccountKeys {
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReservedAccountKeys {
     /// Set of currently active reserved account keys
-    pub active: HashSet<Pubkey>,
+    pub active: AdaptiveSet<Pubkey>,
     /// Set of currently inactive reserved account keys that will be moved to the
     /// active set when their feature id is activated
-    inactive: HashMap<Pubkey, Pubkey>,
+    inactive: AdaptiveMap<Pubkey, Pubkey>,
 }
 
 impl Default for ReservedAccountKeys {
@@ -86,7 +84,7 @@ impl ReservedAccountKeys {
     pub fn new_all_activated() -> Self {
         Self {
             active: Self::all_keys_iter().copied().collect(),
-            inactive: HashMap::default(),
+            inactive: AdaptiveMap::default(),
         }
     }
 
@@ -119,8 +117,8 @@ impl ReservedAccountKeys {
 
     /// Return an empty set of reserved keys for visibility when using in
     /// tests where the dynamic reserved key set is not available
-    pub fn empty_key_set() -> HashSet<Pubkey> {
-        HashSet::default()
+    pub fn empty_key_set() -> AdaptiveSet<Pubkey> {
+        AdaptiveSet::default()
     }
 }
 

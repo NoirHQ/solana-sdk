@@ -50,7 +50,7 @@ pub use solana_program::sdk_ids;
 pub use solana_program::wasm_bindgen;
 pub use solana_program::{
     account_info, address_lookup_table, alt_bn128, big_mod_exp, blake3, bpf_loader,
-    bpf_loader_deprecated, bpf_loader_upgradeable, clock, config, custom_heap_default,
+    bpf_loader_deprecated, bpf_loader_upgradeable, clock, collections, config, custom_heap_default,
     custom_panic_default, debug_account_data, declare_deprecated_sysvar_id, declare_sysvar_id,
     decode_error, ed25519_program, epoch_rewards, epoch_schedule, fee_calculator, impl_sysvar_get,
     incinerator, instruction, keccak, lamports, loader_instruction, loader_upgradeable_instruction,

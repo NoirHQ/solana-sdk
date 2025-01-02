@@ -488,6 +488,7 @@ pub mod bpf_loader;
 pub mod bpf_loader_deprecated;
 pub mod bpf_loader_upgradeable;
 pub mod clock;
+pub mod collections;
 pub mod compute_units;
 pub mod debug_account_data;
 pub mod decode_error;

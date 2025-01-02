@@ -4,6 +4,7 @@ pub use crate::message::{AddressLoader, SimpleAddressLoader};
 use {
     super::SanitizedVersionedTransaction,
     crate::{
+        collections::AdaptiveSet,
         hash::Hash,
         message::{
             legacy,
@@ -19,7 +20,7 @@ use {
         solana_sdk::feature_set,
         transaction::{Result, Transaction, TransactionError, VersionedTransaction},
     },
-    nostd::{collections::HashSet, prelude::*},
+    nostd::prelude::*,
     solana_program::message::SanitizedVersionedMessage,
 };
 
@@ -68,7 +69,7 @@ impl SanitizedTransaction {
         message_hash: Hash,
         is_simple_vote_tx: bool,
         address_loader: impl AddressLoader,
-        reserved_account_keys: &HashSet<Pubkey>,
+        reserved_account_keys: &AdaptiveSet<Pubkey>,
     ) -> Result<Self> {
         let signatures = tx.signatures;
         let SanitizedVersionedMessage { message } = tx.message;
@@ -103,7 +104,7 @@ impl SanitizedTransaction {
         message_hash: impl Into<MessageHash>,
         is_simple_vote_tx: Option<bool>,
         address_loader: impl AddressLoader,
-        reserved_account_keys: &HashSet<Pubkey>,
+        reserved_account_keys: &AdaptiveSet<Pubkey>,
     ) -> Result<Self> {
         let sanitized_versioned_tx = SanitizedVersionedTransaction::try_from(tx)?;
         let is_simple_vote_tx = is_simple_vote_tx
@@ -124,7 +125,7 @@ impl SanitizedTransaction {
     /// Create a sanitized transaction from a legacy transaction
     pub fn try_from_legacy_transaction(
         tx: Transaction,
-        reserved_account_keys: &HashSet<Pubkey>,
+        reserved_account_keys: &AdaptiveSet<Pubkey>,
     ) -> Result<Self> {
         tx.sanitize()?;
 
