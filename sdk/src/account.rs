@@ -25,6 +25,11 @@ use {
     },
     solana_program::{account_info::AccountInfo, debug_account_data::*, sysvar::Sysvar},
 };
+#[cfg(feature = "scale")]
+use {
+    parity_scale_codec::{Decode, Encode},
+    scale_info::TypeInfo,
+};
 
 /// An Account with data that is stored on chain
 #[repr(C)]
@@ -33,6 +38,7 @@ use {
     derive(AbiExample),
     frozen_abi(digest = "HawRVHh7t4d3H3bitWHFt25WhhoDmbJMCfWdESQQoYEy")
 )]
+#[cfg_attr(feature = "scale", derive(Decode, Encode, TypeInfo))]
 #[derive(Deserialize, PartialEq, Eq, Clone, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Account {
