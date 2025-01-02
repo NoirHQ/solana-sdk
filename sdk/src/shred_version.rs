@@ -2,7 +2,7 @@
 //!
 //! [shred]: https://solana.com/docs/terminology#shred
 
-#![cfg(feature = "full")]
+#![cfg(feature = "core")]
 
 use solana_sdk::{
     hard_forks::HardForks,

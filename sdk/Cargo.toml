@@ -55,10 +55,11 @@ std = [
   "sp-io/std",
   "thiserror/std",
 ]
-core = []
-full = [
-  "byteorder",
+core = [
   "chrono",
+  "byteorder",
+]
+full = [
   "core",
   "memmap2",
   "rand",
