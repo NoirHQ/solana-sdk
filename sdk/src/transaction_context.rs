@@ -1,7 +1,7 @@
 //! Data shared between program runtime and built-in programs as well as SBF programs.
 #![deny(clippy::indexing_slicing)]
 
-#[cfg(all(not(target_os = "solana"), feature = "full", debug_assertions))]
+#[cfg(all(not(target_os = "solana"), feature = "core", debug_assertions))]
 use crate::signature::Signature;
 #[cfg(not(target_os = "solana"))]
 use {
@@ -146,7 +146,7 @@ pub struct TransactionContext {
     #[cfg(not(target_os = "solana"))]
     rent: Rent,
     /// Useful for debugging to filter by or to look it up on the explorer
-    #[cfg(all(not(target_os = "solana"), feature = "full", debug_assertions))]
+    #[cfg(all(not(target_os = "solana"), feature = "core", debug_assertions))]
     signature: Signature,
 }
 
@@ -173,7 +173,7 @@ impl TransactionContext {
             return_data: TransactionReturnData::default(),
             accounts_resize_delta: RefCell::new(0),
             rent,
-            #[cfg(all(not(target_os = "solana"), feature = "full", debug_assertions))]
+            #[cfg(all(not(target_os = "solana"), feature = "core", debug_assertions))]
             signature: Signature::default(),
         }
     }
@@ -196,13 +196,13 @@ impl TransactionContext {
     }
 
     /// Stores the signature of the current transaction
-    #[cfg(all(not(target_os = "solana"), feature = "full", debug_assertions))]
+    #[cfg(all(not(target_os = "solana"), feature = "core", debug_assertions))]
     pub fn set_signature(&mut self, signature: &Signature) {
         self.signature = *signature;
     }
 
     /// Returns the signature of the current transaction
-    #[cfg(all(not(target_os = "solana"), feature = "full", debug_assertions))]
+    #[cfg(all(not(target_os = "solana"), feature = "core", debug_assertions))]
     pub fn get_signature(&self) -> &Signature {
         &self.signature
     }
