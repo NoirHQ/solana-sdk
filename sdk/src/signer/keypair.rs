@@ -27,8 +27,6 @@ use {rand0_7::rngs::OsRng, std::path::Path};
 #[derive(Debug)]
 pub struct Keypair(ed25519_dalek::Keypair);
 
-pub type SignatureError = ed25519_dalek::SignatureError;
-
 impl Keypair {
     /// Can be used for generating a Keypair without a dependency on `rand` types
     pub const SECRET_KEY_LENGTH: usize = 32;
@@ -49,9 +47,9 @@ impl Keypair {
     }
 
     /// Recovers a `Keypair` from a byte array
-    pub fn from_bytes(bytes: &[u8]) -> Result<Self, SignatureError> {
+    pub fn from_bytes(bytes: &[u8]) -> Result<Self, ed25519_dalek::SignatureError> {
         if bytes.len() < ed25519_dalek::KEYPAIR_LENGTH {
-            return Err(SignatureError::from_source(String::from(
+            return Err(ed25519_dalek::SignatureError::from_source(String::from(
                 "candidate keypair byte array is too short",
             )));
         }
@@ -62,7 +60,7 @@ impl Keypair {
         let expected_public = ed25519_dalek::PublicKey::from(&secret);
         (public == expected_public)
             .then_some(Self(ed25519_dalek::Keypair { secret, public }))
-            .ok_or(SignatureError::from_source(String::from(
+            .ok_or(ed25519_dalek::SignatureError::from_source(String::from(
                 "keypair bytes do not specify same pubkey as derived from their secret key",
             )))
     }
