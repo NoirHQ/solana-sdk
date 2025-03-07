@@ -147,8 +147,8 @@ pub enum SystemInstruction {
     ///   0. `[WRITE, SIGNER]` Funding account
     ///   1. `[WRITE]` Created account
     ///   2. `[SIGNER]` (optional) Base account; the account matching the base Pubkey below must be
-    ///                          provided as a signer, but may be the same as the funding account
-    ///                          and provided as account 0
+    ///      provided as a signer, but may be the same as the funding account
+    ///      and provided as account 0
     CreateAccountWithSeed {
         /// Base public key
         base: Pubkey,

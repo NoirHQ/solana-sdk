@@ -61,10 +61,7 @@ pub fn deserialize<'a, T>(bytes: &'a [u8]) -> Result<T>
 where
     T: serde::de::Deserialize<'a>,
 {
-    Ok(bincode::serde::decode_borrowed_from_slice(
-        bytes,
-        config::legacy(),
-    )?)
+    Ok(bincode::serde::borrow_decode_from_slice(bytes, config::legacy()).map(|(d, _)| d)?)
 }
 
 /// Returns the size that an object would be if serialized using Bincode with the default
