@@ -16,12 +16,9 @@ pub fn limited_deserialize<T, const N: usize>(
 where
     T: serde::de::DeserializeOwned,
 {
-    bincode::v2::serde::decode_from_slice(
-        instruction_data,
-        config::legacy().with_limit::<N>(),
-    )
-    .map(|(d, _)| d)
-    .map_err(|_| InstructionError::InvalidInstructionData)
+    bincode::v2::serde::decode_from_slice(instruction_data, config::legacy().with_limit::<N>())
+        .map(|(d, _)| d)
+        .map_err(|_| InstructionError::InvalidInstructionData)
 }
 
 #[cfg(test)]
