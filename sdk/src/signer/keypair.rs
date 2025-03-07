@@ -208,8 +208,7 @@ impl EncodableKeypair for Keypair {
 #[cfg(feature = "std")]
 pub fn read_keypair<R: Read>(reader: &mut R) -> Result<Keypair, Box<dyn error::Error>> {
     let bytes: Vec<u8> = serde_json::from_reader(reader)?;
-    Keypair::from_bytes(&bytes)
-        .map_err(|e| nostd::io::Error::new(nostd::io::ErrorKind::Other, e.to_string()).into())
+    Keypair::from_bytes(&bytes).map_err(|e| nostd::io::Error::other(e.to_string()).into())
 }
 
 /// Reads a `Keypair` from a file
